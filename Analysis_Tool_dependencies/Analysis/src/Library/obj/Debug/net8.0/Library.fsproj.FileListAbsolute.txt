@@ -1,0 +1,107 @@
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/PC Uni/###Uni###/HiWi/1 Projekt/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Desktop/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/Uni/###Uni###/HiWi/Projekt_1/AdrianaAnalysisTool/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.sourcelink.json
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Documents/GitHub Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.sourcelink.json
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Documents/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.sourcelink.json
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB Projects/GitHub_Repository/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/bin/Debug/net8.0/Library.deps.json
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/bin/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/bin/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/bin/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.AssemblyReference.cache
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfoInputs.cache
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/Library.AssemblyInfo.fs
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/Library.fsproj.CoreCompileInputs.cache
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/refint/Library.dll
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/Library.xml
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/Library.pdb
+/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/Debug/net8.0/ref/Library.dll

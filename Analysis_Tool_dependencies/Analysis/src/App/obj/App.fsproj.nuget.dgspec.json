@@ -1,0 +1,330 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj": {}
+  },
+  "projects": {
+    "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj",
+        "projectName": "App",
+        "projectPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj",
+        "packagesPath": "/Users/simonfoellinger/.nuget/packages/",
+        "outputPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/simonfoellinger/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/sdk/8.0.302/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj": {
+                "projectPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj"
+              },
+              "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj": {
+                "projectPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj"
+              }
+            }
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Deedle": {
+              "target": "Package",
+              "version": "[3.0.0, )",
+              "generatePathProperty": true
+            },
+            "Deedle.Interactive": {
+              "target": "Package",
+              "version": "[3.0.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[8.0.300, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Data": {
+              "target": "Package",
+              "version": "[6.3.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Stats": {
+              "target": "Package",
+              "version": "[0.5.0, )",
+              "generatePathProperty": true
+            },
+            "FSharpAux.IO": {
+              "target": "Package",
+              "version": "[2.0.0, )",
+              "generatePathProperty": true
+            },
+            "FsSpectre": {
+              "target": "Package",
+              "version": "[0.4.6, )",
+              "generatePathProperty": true
+            },
+            "Giraffe.ViewEngine": {
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "generatePathProperty": true
+            },
+            "Plotly.NET": {
+              "target": "Package",
+              "version": "[4.2.0, )",
+              "generatePathProperty": true
+            },
+            "Plotly.NET.Interactive": {
+              "target": "Package",
+              "version": "[4.2.1, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj",
+        "projectName": "Function",
+        "projectPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj",
+        "packagesPath": "/Users/simonfoellinger/.nuget/packages/",
+        "outputPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/simonfoellinger/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/sdk/8.0.302/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj": {
+                "projectPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj"
+              }
+            }
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Deedle": {
+              "target": "Package",
+              "version": "[3.0.0, )",
+              "generatePathProperty": true
+            },
+            "Deedle.Interactive": {
+              "target": "Package",
+              "version": "[3.0.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[8.0.300, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Data": {
+              "target": "Package",
+              "version": "[6.3.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Stats": {
+              "target": "Package",
+              "version": "[0.5.0, )",
+              "generatePathProperty": true
+            },
+            "FSharpAux.IO": {
+              "target": "Package",
+              "version": "[2.0.0, )",
+              "generatePathProperty": true
+            },
+            "Giraffe.ViewEngine": {
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "generatePathProperty": true
+            },
+            "Plotly.NET": {
+              "target": "Package",
+              "version": "[4.2.0, )",
+              "generatePathProperty": true
+            },
+            "Plotly.NET.Interactive": {
+              "target": "Package",
+              "version": "[4.2.1, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj",
+        "projectName": "Library",
+        "projectPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj",
+        "packagesPath": "/Users/simonfoellinger/.nuget/packages/",
+        "outputPath": "/Users/simonfoellinger/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/simonfoellinger/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/sdk/8.0.302/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Deedle": {
+              "target": "Package",
+              "version": "[3.0.0, )",
+              "generatePathProperty": true
+            },
+            "Deedle.Interactive": {
+              "target": "Package",
+              "version": "[3.0.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[8.0.300, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Data": {
+              "target": "Package",
+              "version": "[6.3.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Stats": {
+              "target": "Package",
+              "version": "[0.5.0, )",
+              "generatePathProperty": true
+            },
+            "FSharpAux.IO": {
+              "target": "Package",
+              "version": "[2.0.0, )",
+              "generatePathProperty": true
+            },
+            "Giraffe.ViewEngine": {
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "generatePathProperty": true
+            },
+            "Plotly.NET": {
+              "target": "Package",
+              "version": "[4.2.0, )",
+              "generatePathProperty": true
+            },
+            "Plotly.NET.Interactive": {
+              "target": "Package",
+              "version": "[4.2.1, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

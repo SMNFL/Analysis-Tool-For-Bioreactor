@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">/Users/simonfoellinger/.nuget/packages/</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">/Users/simonfoellinger/.nuget/packages/</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.10.0</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="/Users/simonfoellinger/.nuget/packages/" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgFSharp_Core Condition=" '$(PkgFSharp_Core)' == '' ">/Users/simonfoellinger/.nuget/packages/fsharp.core/8.0.300</PkgFSharp_Core>
+    <PkgPlotly_NET Condition=" '$(PkgPlotly_NET)' == '' ">/Users/simonfoellinger/.nuget/packages/plotly.net/4.2.0</PkgPlotly_NET>
+    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">/Users/simonfoellinger/.nuget/packages/microsoft.codeanalysis.analyzers/3.3.3</PkgMicrosoft_CodeAnalysis_Analyzers>
+    <PkgPlotly_NET_Interactive Condition=" '$(PkgPlotly_NET_Interactive)' == '' ">/Users/simonfoellinger/.nuget/packages/plotly.net.interactive/4.2.1</PkgPlotly_NET_Interactive>
+    <PkgGiraffe_ViewEngine Condition=" '$(PkgGiraffe_ViewEngine)' == '' ">/Users/simonfoellinger/.nuget/packages/giraffe.viewengine/1.0.0</PkgGiraffe_ViewEngine>
+    <PkgFSharpAux_IO Condition=" '$(PkgFSharpAux_IO)' == '' ">/Users/simonfoellinger/.nuget/packages/fsharpaux.io/2.0.0</PkgFSharpAux_IO>
+    <PkgFSharp_Stats Condition=" '$(PkgFSharp_Stats)' == '' ">/Users/simonfoellinger/.nuget/packages/fsharp.stats/0.5.0</PkgFSharp_Stats>
+    <PkgFSharp_Data Condition=" '$(PkgFSharp_Data)' == '' ">/Users/simonfoellinger/.nuget/packages/fsharp.data/6.3.0</PkgFSharp_Data>
+    <PkgDeedle Condition=" '$(PkgDeedle)' == '' ">/Users/simonfoellinger/.nuget/packages/deedle/3.0.0</PkgDeedle>
+    <PkgDeedle_Interactive Condition=" '$(PkgDeedle_Interactive)' == '' ">/Users/simonfoellinger/.nuget/packages/deedle.interactive/3.0.0</PkgDeedle_Interactive>
+  </PropertyGroup>
+</Project>
