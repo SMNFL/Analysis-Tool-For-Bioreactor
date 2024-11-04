@@ -14,17 +14,17 @@ Do!
 
 
 Step by Step introduction (New Update):
-		- Windows: 
-			open the "run_Analysis_Tool.ps1" with the powershell
-		- MacOS: 
-			open the Terminal and navigate to the folder by copy/paste "cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor"
+	- Windows: 
+		open the "run_Analysis_Tool.ps1" with the powershell
+	- MacOS: 
+		open the Terminal and navigate to the folder by copy/paste "cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor"
 			run the application with "pwsh ./run_Analysis_Tool.ps1" (maybe you have to install PowerShell)
 
 Step by Step introduction (Old Version):
 	- open console and locate to the App data path
 
-		e.g. if it saved on Desktop 
-			copy/paste "cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App" and press enter
+	e.g. if it saved on Desktop 
+		copy/paste "cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App" and press enter
 
 	- start application
 		copy/paste "dotnet run" and press enter
