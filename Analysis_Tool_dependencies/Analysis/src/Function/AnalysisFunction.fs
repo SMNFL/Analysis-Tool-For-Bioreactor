@@ -561,7 +561,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                 LineColor= Color.fromKeyword(Black),
                 ZeroLine = false
                 )
-        printfn("Bis Hier")
+
     // pump-graph combined with OD graph and linear fit for growphase
         let endGraph_single (growphase : (float * float) array) (lightphase : (float * float) array) (odData:(float * float) array) (pump_Data : (float * float) array) (lightData : (float * float) array) =
             let linearRegression_all_chartLine =
@@ -629,7 +629,6 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                 ZeroLine = false
                 )
 
-        printfn("Bis Hier 1")
     // slope/growratefunction for individual growphase of one cylinder
         let slopeOfGrowphase_X (growphase : (float * float) array) (odData:(float * float) array) (growphase_index : int) = 
             let arrayGrowphase_Time_OD (growphase : (float * float) array) (odData:(float * float) array) =
@@ -661,7 +660,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                 else
                     Fitting.LinearRegression.Coefficients(vector [0.0;0.0])
             fit.Coefficients.[1]
-        printfn("Bis Hier2")
+
     // function for table values -> List List string
         let table_list (growphase : (float * float) array) (odData:(float * float) array) : list<Library.tableRow> = 
             let growrateList =
@@ -694,7 +693,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                     }
                 ]
             rowItemsList
-        printfn("Bis Hier3")
+
     // function for boxblot of slopes of one cylinder
         let boxplot_slope (growphase : (float * float) array) (odData:(float * float) array) = 
             let y = 
@@ -715,7 +714,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                 |> List.map (fun rowItem -> (rowItem.slopeOrGrowrateOfLinearRegressionOrGrowphase))
             slopelist
             |> List.sort
-        printfn("Bis Hier4")
+
     // function for table
         let table (growphase : (float * float) array) (odData:(float * float) array) = 
             let header : seq<string> = seq [ "<b>Phase ID</b>"; "starttime of growphase (h)"; "endtime of growphase (h)"; "growrate (h<sup>-1</sub>)"; "duplicationtime (Td) (h)" ]
@@ -931,8 +930,3 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                 (endGraph_single growphase_all.[i] lightphase_all.[i] odData680_all.[i] pump_Data_all.[i] lightData_all.[i])
                 |> Chart.show
             ,Ok()
-    
-// let result: (unit * Result<unit, _>) = analysis "20241007_DK_CBB_TS_Run5_First19hrs_ProcessedDetetedDouble" 0.4 0.3 [0..7] true
-// ignore result
-
-// printfn("successful")
