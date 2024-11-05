@@ -27,7 +27,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
     fun (fileName:string) (upperODCut:float) (lowerODCut:float) (cylinder : int list) (result : bool) ->
         let systemPathSeparator = System.IO.Path.DirectorySeparatorChar
         let seperatorAsString = systemPathSeparator.ToString()
-        let stringToReplace = $"{seperatorAsString}Analysis_Tool_dependencies{seperatorAsString}Analysis{seperatorAsString}src{seperatorAsString}Functio"
+        let stringToReplace = $"{seperatorAsString}Analysis_Tool_dependencies{seperatorAsString}Analysis{seperatorAsString}src{seperatorAsString}Function"
         let currentProjectPath = 
             (__SOURCE_DIRECTORY__)
                 .Replace(stringToReplace, "") // path name of the AnalysisTool-for-bioreactor folder
@@ -290,16 +290,22 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
 
     // lightphases -> array with tuple (starttime,endtime)
         let lightphase (lightData: (float*float) []) =
-            let lightphaseTimeTupleStartEnd : (float * float) array= 
-                lightData
-                |> Array.groupBy (fun (timeLight,lightIntensity) -> lightIntensity)
-                |> Array.filter (fun (constantIntensity,arrayTimeLight) -> arrayTimeLight.Length < 20000 && arrayTimeLight.Length > 300)
-                |> Array.map (fun (constantVolume,arrayTimePumpvolume) ->
-                    (fst (arrayTimePumpvolume.[0]),fst (arrayTimePumpvolume |> Array.last)))
-            if lightphaseTimeTupleStartEnd.Length = 3 then 
-                [|(fst lightphaseTimeTupleStartEnd.[0], snd lightphaseTimeTupleStartEnd.[1]); (fst lightphaseTimeTupleStartEnd.[2], snd lightphaseTimeTupleStartEnd.[2])|]
-            else
-                lightphaseTimeTupleStartEnd
+            let groupByConsecutiveLightIntensity (data: (float * float) array) =
+                let grouped = 
+                    data 
+                    |> Array.fold (fun (acc, currentGroup) (time, intensity) ->
+                        match currentGroup with
+                        | [] -> acc, [(time, intensity)]
+                        | (_, prevIntensity)::_ when prevIntensity = intensity ->
+                            acc, (time, intensity)::currentGroup
+                        | _ -> (currentGroup |> List.rev |> Array.ofList)::acc, [(time, intensity)]
+                    ) ([], [])
+                let finalAcc, lastGroup = grouped
+                (lastGroup |> List.rev |> Array.ofList)::finalAcc |> List.rev |> Array.ofList
+            (groupByConsecutiveLightIntensity lightData)
+            |> Array.filter (fun timeLightarray -> (snd timeLightarray.[0]) <> 0 || timeLightarray.Length > 2)
+            |> Array.map (fun timeLightarray -> (fst (timeLightarray.[0]), fst (timeLightarray |> Array.last)))
+            
 
         let lightphase_1 =
             (lightphase light_Data_1)
@@ -447,54 +453,72 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
         let shapeGrow (growphase : (float * float) array) (odData : (float * float) array) = 
             growphase
             |> Array.mapi (fun i (start,finish) -> 
+                let filteredODData =
+                    odData 
+                    |> Array.filter (fun (time,od680) -> time > start && time < finish && od680 > (log lowerODCut) && od680 < (log upperODCut))
                 let range = [start..0.1..finish] // because of linear fit so shape matches
                 let start = range.[0]
                 let finish = (range |> List.last)
-                let maxODValue = (snd (odData |> Array.sortBy snd |> Array.last))
-                let minODValue = (snd (odData |> Array.sortByDescending snd |> Array.last))
+                let maxODValue = (snd (filteredODData |> Array.sortBy snd |> Array.last))
+                let minODValue = (snd (filteredODData |> Array.sortByDescending snd |> Array.last))
                 Shape.init (
                     ShapeType = StyleParam.ShapeType.Rectangle,
                     X0 = start,
                     X1 = finish,
-                    Y0 = maxODValue + 0.1,
-                    Y1 = maxODValue + 0.5,
+                    Y0 = maxODValue,
+                    Y1 = minODValue,
                     Opacity = 0.2,
                     FillColor = Color.fromHex "#a3e77f",
                     Label = ShapeLabel.init(TextTemplate = $"{i+1}", TextAngle = TextAngle.Degrees 0.0, TextPosition = TextPosition.BottomCenter )
-            )
+                )
             )
             |> Array.toList
 
 
         let shapeLight (lightphase : (float * float) array) (odData : (float * float) array) (lightdata : (float * float) array) =  
             let treatment1and2Tuple =
+                let groupByConsecutiveLightIntensity (data: (float * float) array) =
+                    let grouped = 
+                        data 
+                        |> Array.fold (fun (acc, currentGroup) (time, intensity) ->
+                            match currentGroup with
+                            | [] -> acc, [(time, intensity)]
+                            | (_, prevIntensity)::_ when prevIntensity = intensity ->
+                                acc, (time, intensity)::currentGroup
+                            | _ -> (currentGroup |> List.rev |> Array.ofList)::acc, [(time, intensity)]
+                        ) ([], [])
+                    let finalAcc, lastGroup = grouped
+                    (lastGroup |> List.rev |> Array.ofList)::finalAcc |> List.rev |> Array.ofList
+
                 let groupedByTreatment = 
-                        lightdata
-                        |> Array.groupBy (fun (time, lightData) -> lightData)
-                        |> Array.map (fun (lightTreatment, (time_lightData_array)) -> lightTreatment, ((fst  time_lightData_array.[0]), (fst  (time_lightData_array |> Array.last))))
+                        (groupByConsecutiveLightIntensity lightdata)
+                        |> Array.filter (fun timeLightarray -> (snd timeLightarray.[0]) <> 0 || timeLightarray.Length > 2)
+                        |> Array.map (fun (time_lightData_array) -> (snd  time_lightData_array.[0]), ((fst  time_lightData_array.[0]), (fst  (time_lightData_array |> Array.last))))
                 groupedByTreatment
 
-            let maxODValue = (snd (odData |> Array.sortBy snd |> Array.last))
-            let minODValue = (snd (odData |> Array.sortByDescending snd |> Array.last))
+            let yAxisMinODData = (snd (odData |> Array.sortByDescending snd |> Array.last))
+            let yAxisMaxODData = (snd (odData |> Array.sortBy snd |> Array.last))
+            let yAxisMinODDataAdded = if yAxisMinODData > 0 then yAxisMinODData * 0.95 elif yAxisMinODData < 0 then yAxisMinODData * 1.05 else yAxisMinODData - 0.1
+            let yAxisMaxODDataAdded = if yAxisMaxODData > 0 then yAxisMaxODData * 1.05 elif yAxisMaxODData < 0 then yAxisMaxODData * 0.95 else yAxisMaxODData + 0.1
                 
             let maxYValue =
-                match Array.isEmpty odData with
+                match Array.isEmpty lightdata with
                 | true -> 0.0  // or any default value
-                | false -> maxODValue + 0.25
+                | false -> yAxisMaxODDataAdded
 
             let minYValue =
-                match Array.isEmpty odData with
+                match Array.isEmpty lightdata with
                 | true -> 0.0  // or any default value
-                | false -> minODValue - 0.25
+                | false -> yAxisMinODDataAdded
 
-            lightphase
-            |> Array.mapi (fun i (start,finish) -> 
+            treatment1and2Tuple
+            |> Array.mapi (fun i (light,(start,finish)) -> 
                         Shape.init (
                             ShapeType = StyleParam.ShapeType.Rectangle,
                             X0 = start,
                             X1 = finish,
-                            Y0 = maxYValue,
-                            Y1 = minYValue,
+                            Y0 = minYValue,
+                            Y1 = maxYValue,
                             Opacity = 0.1,
                             FillColor = Color.fromHex "#ffffba",
                             Label = ShapeLabel.init(TextTemplate = $"Highlight {fst treatment1and2Tuple.[i]}", TextAngle = TextAngle.Degrees 0.0, TextPosition = TextPosition.BottomCenter )
@@ -503,7 +527,13 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Array.toList
 
     // pump-graph combined with OD graph and linear fit for growphase
-        let endGraph (growphase : (float * float) array) (odData:(float * float) array) (pump_Data : (float * float) array) (lightData : (float * float) array)=
+        let endGraph (growphase : (float * float) array) (odData:(float * float) array) (pump_Data : (float * float) array) (lightData : (float * float) array) : GenericChart.GenericChart =
+            let yAxisMinPumpLightData = (snd (pump_Data |> Array.sortByDescending snd |> Array.last)) // norm is zero
+            let yAxisMaxPumpLightData = if (snd (pump_Data |> Array.sortBy snd |> Array.last)) > (snd (lightData |> Array.sortBy snd |> Array.last)) then (snd (pump_Data |> Array.sortBy snd |> Array.last)) * 1.05 else (snd (lightData |> Array.sortBy snd |> Array.last)) * 1.05
+            let yAxisMinODData = (snd (odData |> Array.sortByDescending snd |> Array.last))
+            let yAxisMaxODData = (snd (odData |> Array.sortBy snd |> Array.last))
+            let yAxisMinODDataAdded = if yAxisMinODData > 0 then yAxisMinODData * 0.95 elif yAxisMinODData < 0 then yAxisMinODData * 1.05 else yAxisMinODData - 0.1
+            let yAxisMaxODDataAdded = if yAxisMaxODData > 0 then yAxisMaxODData * 1.05 elif yAxisMaxODData < 0 then yAxisMaxODData * 0.95 else yAxisMaxODData + 0.1
             let linearRegression_all_chartLine =
                 [
                     for i in 0 .. growphase.Length - 1 do
@@ -537,7 +567,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.combine
             |> Chart.withXAxisStyle("time (h)",
                 Id=StyleParam.SubPlotId.XAxis 1,
-                MinMax= (0.0, (fst (odData |> Array.last)) + 1.0),
+                MinMax= (0.0, (fst (odData |> Array.last))),
                 Side=StyleParam.Side.Bottom,
                 ShowLine=true,
                 LineColor=Color.fromKeyword Black,
@@ -546,7 +576,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.withYAxisStyle(
                 $"Ln OD680 cylinder {sampleNumber odData}",
                 Side=StyleParam.Side.Left,
-                MinMax= (((snd (odData |> Array.sortByDescending snd |> Array.last)) + 0.25),((snd (odData |> Array.sortBy snd |> Array.last)) + 0.2)),
+                MinMax= (yAxisMinODDataAdded,yAxisMaxODDataAdded),
                 Id=StyleParam.SubPlotId.YAxis 1,
                 ShowLine=true,
                 LineColor=Color.fromKeyword Black,
@@ -555,7 +585,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.withYAxisStyle(
                 $"pumpvolume (ml) and light treatment (µE) cylinder {sampleNumber odData}", 
                 Side=StyleParam.Side.Right,
-                MinMax= (((snd (lightData |> Array.sortByDescending snd |> Array.last)) - 0.0),((snd (lightData |> Array.sortBy snd |> Array.last)) * 1.5)),
+                MinMax= (yAxisMinPumpLightData,yAxisMaxPumpLightData),
                 Id=StyleParam.SubPlotId.YAxis 2,
                 ShowLine=true,
                 LineColor= Color.fromKeyword(Black),
@@ -564,6 +594,12 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
 
     // pump-graph combined with OD graph and linear fit for growphase
         let endGraph_single (growphase : (float * float) array) (lightphase : (float * float) array) (odData:(float * float) array) (pump_Data : (float * float) array) (lightData : (float * float) array) =
+            let yAxisMinPumpLightData = (snd (pump_Data |> Array.sortByDescending snd |> Array.last)) // norm is zero
+            let yAxisMaxPumpLightData = if (snd (pump_Data |> Array.sortBy snd |> Array.last)) > (snd (lightData |> Array.sortBy snd |> Array.last)) then (snd (pump_Data |> Array.sortBy snd |> Array.last)) * 1.05 else (snd (lightData |> Array.sortBy snd |> Array.last)) * 1.05
+            let yAxisMinODData = (snd (odData |> Array.sortByDescending snd |> Array.last))
+            let yAxisMaxODData = (snd (odData |> Array.sortBy snd |> Array.last))
+            let yAxisMinODDataAdded = if yAxisMinODData > 0 then yAxisMinODData * 0.95 elif yAxisMinODData < 0 then yAxisMinODData * 1.05 else yAxisMinODData - 0.1
+            let yAxisMaxODDataAdded = if yAxisMaxODData > 0 then yAxisMaxODData * 1.05 elif yAxisMaxODData < 0 then yAxisMaxODData * 0.95 else yAxisMaxODData + 0.1
             let linearRegression_all_chartLine =
                 [
                     for i in 0 .. growphase.Length - 1 do
@@ -603,7 +639,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.withTitle($"OD680 with linear regression of the growphases of cylinder {sampleNumber odData} with pumpdata")
             |> Chart.withXAxisStyle("time (h)",
                 Id=StyleParam.SubPlotId.XAxis 1,
-                MinMax= (0.0, (fst (odData |> Array.last)) + 1.0),
+                MinMax= (0.0, (fst (odData |> Array.last))),
                 Side=StyleParam.Side.Bottom,
                 ShowLine=true,
                 LineColor=Color.fromKeyword Black,
@@ -612,7 +648,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.withYAxisStyle(
                 $"Ln OD680 cylinder {sampleNumber odData}",
                 Side=StyleParam.Side.Left,
-                MinMax= (((snd (odData |> Array.sortByDescending snd |> Array.last)) + 0.25),((snd (odData |> Array.sortBy snd |> Array.last)) + 0.2)),
+                MinMax= (yAxisMinODDataAdded,yAxisMaxODDataAdded),
                 Id=StyleParam.SubPlotId.YAxis 1,
                 Overlaying= StyleParam.LinearAxisId.Y 2,
                 ShowLine=true,
@@ -622,7 +658,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.withYAxisStyle(
                 $"pumpvolume (ml) and light treatment (µE) cylinder {sampleNumber odData}", 
                 Side=StyleParam.Side.Right,
-                MinMax= (((snd (lightData |> Array.sortByDescending snd |> Array.last)) - 0.0),((snd (lightData |> Array.sortBy snd |> Array.last)) * 1.5)),
+                MinMax= (yAxisMinPumpLightData,yAxisMaxPumpLightData),
                 Id=StyleParam.SubPlotId.YAxis 2,
                 ShowLine=false,
                 LineColor= Color.fromKeyword(Black),
@@ -767,6 +803,12 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
 
     // analysis function 
         let analysisFull (growphase : (float * float) array) (lightphase : (float * float) array) (odData:(float * float) array) (pump_Data :(float * float) array) (lightData : (float * float) array) =
+            let yAxisMinPumpLightData = (snd (pump_Data |> Array.sortByDescending snd |> Array.last)) // norm is zero
+            let yAxisMaxPumpLightData = (snd (pump_Data |> Array.sortBy snd |> Array.last)) * 1.05 
+            let yAxisMinODData = (snd (odData |> Array.sortByDescending snd |> Array.last))
+            let yAxisMaxODData = (snd (odData |> Array.sortBy snd |> Array.last))
+            let yAxisMinODDataAdded = if yAxisMinODData > 0 then yAxisMinODData * 0.95 elif yAxisMinODData < 0 then yAxisMinODData * 1.05 else yAxisMinODData - 0.1
+            let yAxisMaxODDataAdded = if yAxisMaxODData > 0 then yAxisMaxODData * 1.05 elif yAxisMaxODData < 0 then yAxisMaxODData * 0.95 else yAxisMaxODData + 0.1
 
             let subplotGrid = 
                 [|
@@ -782,8 +824,9 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             [
                 
                 (endGraph (growphase) (odData) (pump_Data) (lightData))
-                |> Chart.withTemplate ChartTemplates.lightMirrored
                 |> Chart.withShapes(shapes = (shapeGrow growphase odData), Append = true)
+                |> Chart.withShapes(shapes = (shapeLight lightphase odData lightData), Append = true)
+                |> Chart.withTemplate ChartTemplates.lightMirrored
                 |> Chart.withAxisAnchor(X=1,Y=1);
 
                 //(endGraph (growphase) (odData) (pump_Data))
@@ -806,13 +849,13 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
 
             ]
             |> Chart.Grid(nRows=3, nCols=2, Pattern = StyleParam.LayoutGridPattern.Independent)
-            |> Chart.withTemplate ChartTemplates.lightMirrored
             |> Chart.withShapes(shapes = (shapeGrow growphase odData), Append = true)
             |> Chart.withShapes(shapes = (shapeLight lightphase odData lightData), Append = true)
+            |> Chart.withTemplate ChartTemplates.lightMirrored
             |> Chart.withLegendStyle(Orientation = StyleParam.Orientation.Horizontal)
             |> Chart.withXAxisStyle("",
                 Id=StyleParam.SubPlotId.XAxis 1,
-                MinMax= (0.0, (fst (odData |> Array.last)) + 1.0),
+                MinMax= (0.0, (fst (odData |> Array.last))),
                 Domain = (0.00, 1.00),
                 Side=StyleParam.Side.Bottom,
                 ShowLine=true,
@@ -822,7 +865,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.withYAxisStyle(
                 $"Ln OD680 cylinder {sampleNumber odData}",
                 Side=StyleParam.Side.TopLeft,
-                MinMax= (((snd (odData |> Array.sortByDescending snd |> Array.last)) + 0.25 ),((snd (odData |> Array.sortBy snd |> Array.last)) + 0.2)),
+                MinMax= (yAxisMinODDataAdded,yAxisMaxODDataAdded),
                 Id=StyleParam.SubPlotId.YAxis 1,
                 Domain = (0.725, 1.00),
                 ShowLine=true,
@@ -832,7 +875,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
             |> Chart.withYAxisStyle(
                 $"pumpvolume (ml) cylinder {sampleNumber odData}", 
                 Side=StyleParam.Side.Right,
-                MinMax= (((snd (pump_Data |> Array.sortByDescending snd |> Array.last)) - 0.05),((snd (pump_Data |> Array.sortBy snd |> Array.last)) * 1.)),
+                MinMax= (yAxisMinPumpLightData,yAxisMaxPumpLightData),
                 Id=StyleParam.SubPlotId.YAxis 2,
                 //Overlaying=StyleParam.LinearAxisId.Y 1,
                 Domain = (0.625, 0.725),
@@ -842,7 +885,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                 )
             |> Chart.withXAxisStyle("time (h)",
                 Id=StyleParam.SubPlotId.XAxis 2,
-                MinMax= (0.0, (fst (odData |> Array.last)) + 1.0),
+                MinMax= (0.0, (fst (odData |> Array.last))),
                 Domain = (0.00, 1.00),
                 Side=StyleParam.Side.Bottom,
                 ShowLine=true,
@@ -930,3 +973,4 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
                 (endGraph_single growphase_all.[i] lightphase_all.[i] odData680_all.[i] pump_Data_all.[i] lightData_all.[i])
                 |> Chart.show
             ,Ok()
+
