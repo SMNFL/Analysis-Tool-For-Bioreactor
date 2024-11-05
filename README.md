@@ -1,49 +1,75 @@
-# AnalysisTool-for-bioreactor
+# AnalysisTool-for-Bioreactor
 
-Introduction for console application of AnalysisTool-for-bioreactor (Save the hole folder "AnalysisTool-for-bioreactor")
+## Introduction
+
+Welcome to the **AnalysisTool-for-Bioreactor** console application! This guide will walk you through the setup and usage of the tool.
+
+### Prerequisites
+
+1. **Update your username:** Replace `<currentUser>` with your actual username in the steps below Here’s the corrected sentence: (Example for saving the repo on Desktop).
+2. **Install .NET 8.0:** If not installed, download it from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
+3. **Prepare your data:** Copy and paste your data table into the `InsertTableHere` folder (`/AnalysisTool-for-bioreactor/InsertTableHere`).
+4. **Check the output:** After analysis, find the results in the `Output` folder (including data analysis tables and plot HTML files).
+
+---
+
+## Step-by-Step Guide (New Version)
+
+### Windows:
+1. Open `RunAnalysisTool_Windows.bat` using right-click with PowerShell.
+
+### MacOS:
+1. Open Terminal and run:
+   	```bash
+   	xattr -d com.apple.quarantine /path/to/Analysis-Tool-For-Bioreactor/RunAnalysisTool_MacOS.app
+2. Open RunAnalysisTool_MacOS.app by double-clicking it.
+(Note: If blocked due to an unidentified developer, go to Settings > Privacy & Security, scroll down, and press “Allow Anyway.”)
+
+#### Alternative MacOS: 
+1. Open Terminal, navigate to the folder:
+   	```bash
+	cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies
+3. Run the application:
+   	```bash
+	pwsh ./run_Analysis_Tool.ps1
+ (You may need to install PowerShell. If not installed, download it from [here](https://github.com/PowerShell/PowerShell)
+
+## Step-by-Step Guide (Old Version for Windows or MacOS):
+1. Open the console and navigate to the app data path.
+   	```bash
+   	cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App
+3. Start the application:
+	```bash
+ 	dotnet run
+
+## Input Format
+Provide the input in the following format:
+	
+	202310_TR16_HLexperiment_RawData_Venny_Simon 0.44 0.36 3
+ or
+ 	
+ 	202310_TR16_HLexperiment_RawData_Venny_Simon 0.44 0.36 all
 
 
-Do!
-	- change <currentUser> to your username below
-
-	- install .NET 8.0 if you have not done before		(https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-
-	- copy/paste your data table to "InsertTableHere" folder (/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/InsertTableHere) 
-
-	- after analysis look into folder "Output"	(for the data analysis tables and plot html files)
+### Parameters:
+- **Filename:** The `.txt` data table must contain all 8 columns (Light, OD, and pump data).
+- **Upper OD Threshold:** A number with a decimal point, e.g., `3.0`.
+- **Lower OD Threshold:** A number with a decimal point, e.g., `3.0`.
+- **Cylinder:** Choose a number between `1` and `8`, or use `all`.
 
 
-Step by Step introduction (New Update):
-	- Windows: 
-		open the "run_Analysis_Tool.ps1" with the powershell
-	- MacOS: 
-		open the Terminal and navigate to the folder by copy/paste "cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor"
-			run the application with "pwsh ./run_Analysis_Tool.ps1" (maybe you have to install PowerShell)
+## Troubleshooting
 
-Step by Step introduction (Old Version):
-	- open console and locate to the App data path
-
-	e.g. if it saved on Desktop 
-		copy/paste "cd /Users/<currentUser>/Desktop/AnalysisTool-for-bioreactor/Analysis_Tool_dependencies/Analysis/src/App" and press enter
-
-	- start application
-		copy/paste "dotnet run" and press enter
-
-==> Now the application runs and you can read the introduction to use it!
-
-TIPS!:
-Give the Input like:
-	"202310_TR16_HLexperiment_RawData_Venny_Simon 0.44 0.36 3" 
-Or 
-	"202310_TR16_HLexperiment_RawData_Venny_Simon 0.44 0.36 all"
+If the application fails and you cannot identify the issue, please contact foelling@rptu.de.
 
 
-[
-	filename (filename of the .txt data table needs all 8 columns for Light- ,OD- and pumpdata),
-	upper OD Threshold (needs to be a number with dot e.g. 3.0),
-	lower OD Threshold (needs to be a number with dot e.g. 3.0),
-	cylinder (choose "1" - "8" as single number or "all" as word)
-]
 
 
-If it fails and you don't know why please contact foelling@rptu.de
+
+
+
+
+
+
+
+
