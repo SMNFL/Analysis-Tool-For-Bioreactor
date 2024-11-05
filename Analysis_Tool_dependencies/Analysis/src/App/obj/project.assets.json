@@ -3926,11 +3926,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor copy/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj",
+      "projectUniqueName": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj",
       "projectName": "App",
-      "projectPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor copy/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj",
+      "projectPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor/Analysis_Tool_dependencies/Analysis/src/App/App.fsproj",
       "packagesPath": "/Users/simonfoellinger/.nuget/packages/",
-      "outputPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor copy/Analysis_Tool_dependencies/Analysis/src/App/obj/",
+      "outputPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor/Analysis_Tool_dependencies/Analysis/src/App/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/simonfoellinger/.nuget/NuGet/NuGet.Config"
@@ -3946,11 +3946,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor copy/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj": {
-              "projectPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor copy/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj"
+            "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj": {
+              "projectPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor/Analysis_Tool_dependencies/Analysis/src/Function/Function.fsproj"
             },
-            "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor copy/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj": {
-              "projectPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor copy/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj"
+            "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj": {
+              "projectPath": "/Users/simonfoellinger/Library/Mobile Documents/com~apple~CloudDocs/CSB_Projects/GitHub_Repository/Analysis-Tool-For-Bioreactor/Analysis_Tool_dependencies/Analysis/src/Library/Library.fsproj"
             }
           }
         }
