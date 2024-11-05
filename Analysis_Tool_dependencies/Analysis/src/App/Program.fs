@@ -43,7 +43,7 @@ let rec main argv =
                 .Start("\n\n[green bold][slowblink]Loading[/][/]\n", fun ctx ->
                     ctx.Spinner <- Spinner.Known.SimpleDotsScrolling;
                     ctx.SpinnerStyle <- Style.Parse("green bold");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1600);
                 )
 
             AnsiConsole.Status()
@@ -51,7 +51,7 @@ let rec main argv =
                     AnsiConsole.MarkupLine("\n\nLOG: Read data ...");
                     ctx.Spinner <- Spinner.Known.SimpleDotsScrolling;
                     ctx.SpinnerStyle <- Style.Parse("green bold");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(800);
                 )
 
             let isFailed result =
@@ -66,11 +66,11 @@ let rec main argv =
                     ctx.Spinner <- Spinner.Known.SimpleDotsScrolling;
                     ctx.SpinnerStyle <- Style.Parse("green bold");
                     AnsiConsole.MarkupLine("LOG: Setup OD thresholds ...");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(800);
                     //Update the status and spinner
 
                     AnsiConsole.MarkupLine("LOG: Choose cylinder(s) ...");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(800);
                 )
 
             if isFailed resultForFailTest then
@@ -81,22 +81,22 @@ let rec main argv =
                         ctx.Spinner <- Spinner.Known.SimpleDotsScrolling;
                         ctx.SpinnerStyle <- Style.Parse("green bold");
                         AnsiConsole.MarkupLine("LOG: Loading light treatment data ...");
-                        Thread.Sleep(1000);
+                        Thread.Sleep(800);
 
                         AnsiConsole.MarkupLine("LOG: Loading OD messurement data ...");
-                        Thread.Sleep(1000);
+                        Thread.Sleep(800);
 
                         AnsiConsole.MarkupLine("LOG: Loading medium pump volume data ...");
-                        Thread.Sleep(1000);
+                        Thread.Sleep(800);
                     );
                 AnsiConsole.MarkupLine "\n [bold green]Valid Input![/]\n"     
-                Thread.Sleep(2000)
+                Thread.Sleep(800)
                 AnsiConsole.MarkupLine $"[bold lightsteelblue3]File:[/] {fileName}"
-                Thread.Sleep(500)
+                Thread.Sleep(250)
                 AnsiConsole.MarkupLine $"[bold lightsteelblue3]Upper OD Threshold:[/] {upperThreshold}"
-                Thread.Sleep(500)
+                Thread.Sleep(250)
                 AnsiConsole.MarkupLine $"[bold lightsteelblue3]Lower OD Threshold:[/] {lowerThreshold}"        
-                Thread.Sleep(500)
+                Thread.Sleep(250)
                 AnsiConsole.MarkupLine $"[bold lightsteelblue3]Cylinder:[/] {cylinder}"
 
                 let progress =
@@ -141,8 +141,7 @@ let rec main argv =
             if restart = true then main argv |> ignore else AnsiConsole.MarkupLine "\n\n Thanks for using my AnalysisTool, i hope you liked it! \n [blue bold]If you want to start again type [underline]dotnet run[/] and press enter.[/] \n\n"
     with
     | ex -> 
-        printf("error oggggggg")
-        Thread.Sleep(3000)
+        Thread.Sleep(2500)
         AnsiConsole.MarkupLine "\n\n [red bold]An error occurred:[/] \n  [red]Oh something went wrong, maybe [underline]you mistyped[/] or the data [underline]table layout is not correct[/].[/]\n  [red]Analysis failed.[/]\n\n"
         AnsiConsole.MarkupLine $"[red bold]Issue: [/][gray]{ex.Message}[/] \n\n"
 

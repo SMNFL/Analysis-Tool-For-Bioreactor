@@ -27,7 +27,7 @@ let analysis: string -> float -> float -> int list -> bool -> (unit * Result<uni
     fun (fileName:string) (upperODCut:float) (lowerODCut:float) (cylinder : int list) (result : bool) ->
         let systemPathSeparator = System.IO.Path.DirectorySeparatorChar
         let seperatorAsString = systemPathSeparator.ToString()
-        let stringToReplace = $"{seperatorAsString}Analysis{seperatorAsString}src{seperatorAsString}Function"
+        let stringToReplace = $"{seperatorAsString}Analysis_Tool_dependencies{seperatorAsString}Analysis{seperatorAsString}src{seperatorAsString}Functio"
         let currentProjectPath = 
             (__SOURCE_DIRECTORY__)
                 .Replace(stringToReplace, "") // path name of the AnalysisTool-for-bioreactor folder
