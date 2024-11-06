@@ -16,7 +16,7 @@ Welcome to the **AnalysisTool-for-Bioreactor** console application! This guide w
 ## Step-by-Step Guide (New Version)
 
 ### Windows:
-1. Open `RunAnalysisTool_Windows.bat` using right-click with PowerShell.
+1. Open `RunAnalysisTool_Windows.bat` by double-click or using right-click and open with PowerShell.
 
 ### MacOS:
 1. Open Terminal and run:
