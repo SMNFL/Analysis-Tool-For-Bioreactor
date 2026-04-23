@@ -1,10 +1,10 @@
 
 <p align="center">
-  <img src="../deps/src/App/Assets/app_icon_readme.png" alt="Multicultivator Logo" width="680"/>
+  <img src="../src/App/Assets/app_icon_readme.png" alt="Multicultivator Logo" width="680"/>
 </p>
 <p align="center">
 Multicultivator Analysis — Cross platform desktop application for optical density based growth phase analysis<br><br>
-<a href="../README.md">Main Overview</a> | <a href="analysis_summary.md">Analysis Summary</a> | <a href="../deps/README.md">App and Development</a> | <a href="../packaging/README.md">Packaging and Installation</a>
+<a href="../README.md">Main Overview</a> | <a href="analysis_summary.md">Analysis Summary</a> | <a href="../src/README.md">App and Development</a> | <a href="../packaging/README.md">Packaging and Installation</a>
 </p>
 
 # Analysis Summary
