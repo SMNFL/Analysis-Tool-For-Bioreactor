@@ -3,8 +3,10 @@
 </p>
 
 <p align="center">
-Desktop application for optical density based growth phase analysis in multicultivator systems<br><br>
 <a href="../README.md">Main Overview</a> | <a href="../docs/analysis_summary.md">Analysis Summary</a> | <a href="../src/README.md">App and Development</a> | <a href="README.md">Packaging and Installation</a>
+</p>
+<p align="center">
+Desktop application for optical density based growth phase analysis in multicultivator systems
 </p>
 
 ## Download
