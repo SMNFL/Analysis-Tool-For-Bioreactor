@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./src/App/Assets/app_icon_readme.png" alt="Multicultivator Logo" width="680"/>
+  <img src="../src/App/Assets/app_icon_readme.png" alt="Multicultivator Logo" width="680"/>
 </p>
 
 <p align="center">
@@ -557,11 +557,11 @@ OutputBaseFilename=MulticultivatorSetup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-SetupIconFile=..\..\deps\src\App\Assets\app_icon.ico
+SetupIconFile=..\..\src\App\Assets\app_icon.ico
 UninstallDisplayIcon={app}\Multicultivator.exe
 
 [Files]
-Source: "..\..\deps\src\App\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
+Source: "..\..\src\App\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"; Flags: checkedonce
