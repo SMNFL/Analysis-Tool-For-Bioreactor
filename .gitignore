@@ -1,3 +1,87 @@
+# OS generated files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100/
+.Trashes/
+._*
 
-Analysis_Tool_dependencies/Analysis/src/Function/test.ipynb
-InsertTableHere/20241007_DK_CBB_TS_Run5_bis164_Processed.txt
+# Editor and IDE files
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# User-specific files
+*.user
+*.suo
+*.userprefs
+*.rsuser
+
+# Build outputs
+bin/
+obj/
+out/
+artifacts/
+Debug/
+Release/
+
+# .NET and F# generated files
+*.fsproj.user
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+TestResults/
+
+# Paket
+.paket/load/
+paket-files/
+
+# NuGet
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.cache
+*.pid
+
+# Coverage and profiling
+coverage/
+*.coverage
+*.coveragexml
+
+# Local release and packaging outputs
+releases/
+pkgroot/
+
+# macOS packaging
+*.dmg
+*.pkg
+*.app
+*.xcuserstate
+
+# Windows packaging
+*.msi
+*.exe
+
+# Archives
+*.zip
+*.tar.gz
+*.tgz
+
+# Python virtual environments if used for helper scripts
+.venv/
+venv/
+
+# Node modules if ever used for tooling
+node_modules/
