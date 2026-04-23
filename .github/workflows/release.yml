@@ -43,7 +43,7 @@ jobs:
         run: brew install create-dmg
 
       - name: Publish macOS arm64 app with release version
-        run: dotnet publish deps/src/App/App.fsproj -c Release -r osx-arm64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
+        run: dotnet publish src/App/App.fsproj -c Release -r osx-arm64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
 
       - name: Make macOS arm64 scripts executable
         run: |
@@ -172,11 +172,11 @@ jobs:
           Compression=lzma
           SolidCompression=yes
           WizardStyle=modern
-          SetupIconFile=..\..\deps\src\App\Assets\app_icon.ico
+          SetupIconFile=..\..\src\App\Assets\app_icon.ico
           UninstallDisplayIcon={app}\Multicultivator.exe
 
           [Files]
-          Source: "..\..\deps\src\App\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
+          Source: "..\..\src\App\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
           [Tasks]
           Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"; Flags: checkedonce
@@ -245,7 +245,7 @@ jobs:
       - name: Create Linux archive
         run: |
           mkdir -p releases
-          tar -czvf releases/Multicultivator-linux.tar.gz -C deps/src/App/bin/Release/net8.0/linux-x64/publish .
+          tar -czvf releases/Multicultivator-linux.tar.gz -C src/App/bin/Release/net8.0/linux-x64/publish .
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
