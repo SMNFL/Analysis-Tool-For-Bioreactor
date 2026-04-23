@@ -4,9 +4,9 @@ set -euo pipefail
 VERSION="${1:-1.0.0}"
 APP_BUNDLE_NAME="Multicultivator-macos-arm64"
 APP_DISPLAY_NAME="Multicultivator"
-PROJECT="deps/src/App/App.fsproj"
+PROJECT="src/App/App.fsproj"
 RID="osx-arm64"
-PUBLISH_DIR="deps/src/App/bin/Release/net8.0/${RID}/publish"
+PUBLISH_DIR="src/App/bin/Release/net8.0/${RID}/publish"
 APP_DIR="releases/${APP_BUNDLE_NAME}.app"
 
 rm -rf "$APP_DIR"
@@ -14,7 +14,7 @@ mkdir -p "$APP_DIR/Contents/MacOS"
 mkdir -p "$APP_DIR/Contents/Resources"
 
 cp -R "$PUBLISH_DIR"/. "$APP_DIR/Contents/MacOS/"
-cp deps/src/App/Assets/app_icon.icns "$APP_DIR/Contents/Resources/app_icon.icns"
+cp src/App/Assets/app_icon.icns "$APP_DIR/Contents/Resources/app_icon.icns"
 
 EXECUTABLE_PATH=$(find "$PUBLISH_DIR" -maxdepth 1 -type f -perm -111 ! -name "*.dll" ! -name "*.json" ! -name "*.dylib" ! -name "*.so" ! -name "*.pdb" | head -n1)
 

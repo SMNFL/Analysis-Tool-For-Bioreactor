@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-<a href="../README.md">Main Overview</a> | <a href="../docs/analysis_summary.md">Analysis Summary</a> | <a href="README.md">App and Development</a> | <a href="../packaging/README.md">Packaging and Installation</a>
+<a href="../README.md">Main Overview</a> | <a href="../docs/analysis_summary.md">Analysis Summary</a> | <a href="../src/README.md">App and Development</a> | <a href="../packaging/README.md">Packaging and Installation</a>
 </p>
 <p align="center">
 Desktop application for optical density based growth phase analysis in multicultivator systems
@@ -157,19 +157,19 @@ Note: Prebuilt releases are self contained and do not require .NET to be install
 From repository root:
 
 ```bash
-dotnet build deps/src/App/App.fsproj
+dotnet build src/App/App.fsproj
 ```
 
 ###### Run the app in development mode
 
 ```bash
-dotnet run --project deps/src/App/App.fsproj
+dotnet run --project src/App/App.fsproj
 ```
 
 ###### Clean build artifacts
 
 ```bash
-dotnet clean deps/src/App/App.fsproj
+dotnet clean src/App/App.fsproj
 ```
 
 ### Publish
@@ -178,44 +178,44 @@ dotnet clean deps/src/App/App.fsproj
 
 ###### macOS Apple Silicon
 ```bash
-dotnet publish deps/src/App/App.fsproj -c Release -r osx-arm64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
+dotnet publish src/App/App.fsproj -c Release -r osx-arm64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
 ```
 
 ###### macOS Intel
 ```bash
-dotnet publish deps/src/App/App.fsproj -c Release -r osx-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
+dotnet publish src/App/App.fsproj -c Release -r osx-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
 ```
 
 ###### Windows x64
 ```bash
-dotnet publish deps/src/App/App.fsproj -c Release -r win-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
+dotnet publish src/App/App.fsproj -c Release -r win-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
 ```
 
 ###### Linux x64
 ```bash
-dotnet publish deps/src/App/App.fsproj -c Release -r linux-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
+dotnet publish src/App/App.fsproj -c Release -r linux-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
 ```
 
 #### Publish output folders
 
 ###### macOS Apple Silicon
 ```text
-deps/src/App/bin/Release/net8.0/osx-arm64/publish/
+src/App/bin/Release/net8.0/osx-arm64/publish/
 ```
 
 ###### macOS Intel
 ```text
-deps/src/App/bin/Release/net8.0/osx-x64/publish/
+src/App/bin/Release/net8.0/osx-x64/publish/
 ```
 
 ###### Windows x64
 ```text
-deps/src/App/bin/Release/net8.0/win-x64/publish/
+src/App/bin/Release/net8.0/win-x64/publish/
 ```
 
 ###### Linux x64
 ```text
-deps/src/App/bin/Release/net8.0/linux-x64/publish/
+src/App/bin/Release/net8.0/linux-x64/publish/
 ```
 
 ## App Icon
@@ -225,32 +225,32 @@ deps/src/App/bin/Release/net8.0/linux-x64/publish/
 Source image should ideally be 1024 x 1024 PNG.
 
 ```bash
-magick deps/src/App/Assets/app_icon.png -define icon:auto-resize=256,128,64,48,32,16 deps/src/App/Assets/app_icon.ico
+magick src/App/Assets/app_icon.png -define icon:auto-resize=256,128,64,48,32,16 src/App/Assets/app_icon.ico
 ```
 
 ### Create macOS `.icns` icon
 
 ```bash
-rm -rf deps/src/App/Assets/app_icon.iconset
-mkdir deps/src/App/Assets/app_icon.iconset
+rm -rf src/App/Assets/app_icon.iconset
+mkdir src/App/Assets/app_icon.iconset
 
-sips -z 16 16 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_16x16.png
-sips -z 32 32 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_16x16@2x.png
-sips -z 32 32 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_32x32.png
-sips -z 64 64 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_32x32@2x.png
-sips -z 128 128 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_128x128.png
-sips -z 256 256 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_128x128@2x.png
-sips -z 256 256 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_256x256.png
-sips -z 512 512 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_256x256@2x.png
-sips -z 512 512 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_512x512.png
-sips -z 1024 1024 deps/src/App/Assets/app_icon.png --out deps/src/App/Assets/app_icon.iconset/icon_512x512@2x.png
+sips -z 16 16 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_16x16.png
+sips -z 32 32 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_16x16@2x.png
+sips -z 32 32 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_32x32.png
+sips -z 64 64 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_32x32@2x.png
+sips -z 128 128 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_128x128.png
+sips -z 256 256 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_128x128@2x.png
+sips -z 256 256 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_256x256.png
+sips -z 512 512 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_256x256@2x.png
+sips -z 512 512 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_512x512.png
+sips -z 1024 1024 src/App/Assets/app_icon.png --out src/App/Assets/app_icon.iconset/icon_512x512@2x.png
 
-iconutil -c icns deps/src/App/Assets/app_icon.iconset -o deps/src/App/Assets/app_icon.icns
+iconutil -c icns src/App/Assets/app_icon.iconset -o src/App/Assets/app_icon.icns
 ```
 
 ### App project icon configuration
 
-In `deps/src/App/App.fsproj` use:
+In `src/App/App.fsproj` use:
 
 ```xml
 <<Project Sdk="Microsoft.NET.Sdk">
@@ -348,7 +348,7 @@ type MainWindow() as this =
 First publish:
 
 ```bash
-dotnet publish deps/src/App/App.fsproj -c Release -r osx-arm64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
+dotnet publish src/App/App.fsproj -c Release -r osx-arm64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
 ```
 
 Then create the bundle using the provided script (recommended):
@@ -385,14 +385,14 @@ Copy all published files:
 
 ```bash
 # for arm64
-cp -R deps/src/App/bin/Release/net8.0/osx-arm64/publish/* Multicultivator-macos-arm64.app/Contents/MacOS/
+cp -R src/App/bin/Release/net8.0/osx-arm64/publish/* Multicultivator-macos-arm64.app/Contents/MacOS/
 ```
 
 Copy the icon:
 
 ```bash
 # for arm64
-cp deps/src/App/Assets/app_icon.icns Multicultivator-macos-arm64.app/Contents/Resources/app_icon.icns
+cp src/App/Assets/app_icon.icns Multicultivator-macos-arm64.app/Contents/Resources/app_icon.icns
 ```
 
 Create `Info.plist`:
@@ -495,13 +495,13 @@ open releases/Multicultivator-macos-x64.app
 First publish:
 
 ```bash
-dotnet publish deps/src/App/App.fsproj -c Release -r win-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
+dotnet publish src/App/App.fsproj -c Release -r win-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
 ```
 
 Output:
 
 ```text
-deps/src/App/bin/Release/net8.0/win-x64/publish/
+src/App/bin/Release/net8.0/win-x64/publish/
 ```
 
 Inside that folder there will be the Windows executable.
@@ -526,13 +526,13 @@ For the final desktop app set it back to:
 
 ```pwsh
 # (alternative windows.zip)
-Compress-Archive -Path deps/src/App/bin/Release/net8.0/win-x64/publish/* -DestinationPath releases/Multicultivator-win-x64.zip
+Compress-Archive -Path src/App/bin/Release/net8.0/win-x64/publish/* -DestinationPath releases/Multicultivator-win-x64.zip
 ```
 
 ```bash
 # (alternative windows.zip)
-cd deps/src/App/bin/Release/net8.0/win-x64/publish
-zip -r "$(pwd | sed 's#/deps/src/App/bin/Release/net8.0/win-x64/publish##')/releases/Multicultivator-win-x64.zip" .
+cd src/App/bin/Release/net8.0/win-x64/publish
+zip -r "$(pwd | sed 's#/src/App/bin/Release/net8.0/win-x64/publish##')/releases/Multicultivator-win-x64.zip" .
 ```
 
 1. Publish for Windows  
@@ -595,13 +595,13 @@ releases/MulticultivatorSetup.exe
 Publish:
 
 ```bash
-dotnet publish deps/src/App/App.fsproj -c Release -r linux-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
+dotnet publish src/App/App.fsproj -c Release -r linux-x64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0
 ```
 
 Output:
 
 ```text
-deps/src/App/bin/Release/net8.0/linux-x64/publish/
+src/App/bin/Release/net8.0/linux-x64/publish/
 ```
 
 Run on Linux:
@@ -615,7 +615,7 @@ Depending on the Linux distribution, required system packages for GUI rendering 
 ### Linux `.tar.gz`
 
 ```bash
-tar -czvf releases/Multicultivator-linux.tar.gz -C deps/src/App/bin/Release/net8.0/linux-x64/publish .
+tar -czvf releases/Multicultivator-linux.tar.gz -C src/App/bin/Release/net8.0/linux-x64/publish .
 ```
 
 ---
@@ -623,7 +623,7 @@ tar -czvf releases/Multicultivator-linux.tar.gz -C deps/src/App/bin/Release/net8
 ## Project Structure
 
 ```
-deps/
+
   src/
     App/        UI (Avalonia)
     Function/   analysis pipeline

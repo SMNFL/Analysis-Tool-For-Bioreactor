@@ -101,7 +101,7 @@ jobs:
         run: brew install create-dmg
 
       - name: Publish macOS x64 app with release version
-        run: dotnet publish deps/src/App/App.fsproj -c Release -r osx-x64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
+        run: dotnet publish src/App/App.fsproj -c Release -r osx-x64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
 
       - name: Make macOS x64 scripts executable
         run: |
@@ -156,7 +156,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Publish Windows app
-        run: dotnet publish deps/src/App/App.fsproj -c Release -r win-x64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
+        run: dotnet publish src/App/App.fsproj -c Release -r win-x64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
 
       - name: Create Inno Setup script
         shell: powershell
@@ -201,7 +201,7 @@ jobs:
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path releases | Out-Null
-          Compress-Archive -Path deps/src/App/bin/Release/net8.0/win-x64/publish/* -DestinationPath releases/Multicultivator-win-x64.zip
+          Compress-Archive -Path src/App/bin/Release/net8.0/win-x64/publish/* -DestinationPath releases/Multicultivator-win-x64.zip
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
@@ -240,7 +240,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Publish Linux app
-        run: dotnet publish deps/src/App/App.fsproj -c Release -r linux-x64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
+        run: dotnet publish src/App/App.fsproj -c Release -r linux-x64 --self-contained true -p:Version=${{ steps.version.outputs.version }} -p:InformationalVersion=${{ steps.version.outputs.raw }} -p:AssemblyVersion=${{ steps.version.outputs.version }}.0 -p:FileVersion=${{ steps.version.outputs.version }}.0
 
       - name: Create Linux archive
         run: |
