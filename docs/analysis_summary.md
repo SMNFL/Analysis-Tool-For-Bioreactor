@@ -44,14 +44,14 @@ The selected file is read as a tab separated table. The `time` column is used as
 
 Mathematically, each measured signal becomes a time series of ordered pairs:
 
-\[
+$$
 (t_i, x_i)
-\]
+$$
 
 where:
 
-- \(t_i\) is the measurement time
-- \(x_i\) is the measured value at that time
+- $t_i$ is the measurement time
+- $x_i$ is the measured value at that time
 
 ---
 
@@ -65,7 +65,7 @@ The program renames columns internally so that each signal can be handled unifor
 
 Missing values in pump and light data are forward-filled.
 
-This means that if a value is missing at time \(t_i\), the previous valid value is reused.
+This means that if a value is missing at time $t_i$, the previous valid value is reused.
 
 ---
 
@@ -73,27 +73,27 @@ This means that if a value is missing at time \(t_i\), the previous valid value 
 
 All OD values are transformed using the natural logarithm:
 
-\[
+$$
 y_i = \ln(\mathrm{OD}_i)
-\]
+$$
 
 This is done because exponential growth becomes approximately linear on the log scale.
 
 If biomass follows:
 
-\[
+$$
 \mathrm{OD}(t) = \mathrm{OD}_0 e^{\mu t}
-\]
+$$
 
 then after log transformation:
 
-\[
+$$
 \ln(\mathrm{OD}(t)) = \ln(\mathrm{OD}_0) + \mu t
-\]
+$$
 
 where:
 
-- \(\mu\) is the growth rate
+- $\mu$ is the growth rate
 - the slope of the line in log space is the growth rate
 
 ---
@@ -102,9 +102,9 @@ where:
 
 Pump data are converted from absolute volume to relative displacement by subtracting the first recorded value:
 
-\[
+$$
 p_{\mathrm{norm}}(t) = p(t) - p(t_0)
-\]
+$$
 
 This makes the pump signal easier to interpret visually and analytically, because the curve starts at zero.
 
@@ -116,21 +116,21 @@ Light phases are identified by grouping consecutive time points with the same li
 
 A phase is defined as a contiguous segment of constant light value:
 
-\[
+$$
 L_k = \{(t_i, l_i), (t_{i+1}, l_{i+1}), ..., (t_j, l_j)\}
-\]
+$$
 
 with:
 
-\[
+$$
 l_i = l_{i+1} = \cdots = l_j
-\]
+$$
 
 For each such segment, the reported light phase is:
 
-\[
+$$
 (t_{\mathrm{start}}, t_{\mathrm{end}})
-\]
+$$
 
 Short or zero-only noise segments are filtered out unless they are sufficiently long.
 
@@ -146,35 +146,35 @@ The program first identifies pump regions where the pump value remains constant 
 
 Each plateau defines a candidate time interval:
 
-\[
+$$
 [t_a, t_b]
-\]
+$$
 
 ### 6.2 Restrict by OD window
 
 Within each candidate interval, only time points are kept whose log-transformed OD lies inside the user-defined OD bounds:
 
-\[
+$$
 \ln(\mathrm{lowerODCut}) \le \ln(\mathrm{OD}(t)) \le \ln(\mathrm{upperODCut})
-\]
+$$
 
 Equivalently in original OD scale:
 
-\[
+$$
 \mathrm{lowerODCut} \le \mathrm{OD}(t) \le \mathrm{upperODCut}
-\]
+$$
 
 The final grow phase is the first and last time point of the filtered interval:
 
-\[
+$$
 (t_{\mathrm{grow,start}}, t_{\mathrm{grow,end}})
-\]
+$$
 
 If no valid OD points are found inside a candidate interval, the phase is reported internally as:
 
-\[
+$$
 (0,0)
-\]
+$$
 
 ---
 
@@ -182,48 +182,48 @@ If no valid OD points are found inside a candidate interval, the phase is report
 
 For each grow phase, the program extracts all points:
 
-\[
+$$
 (t_i, y_i)
-\]
+$$
 
 where:
 
-- \(t_i\) lies inside the grow phase
-- \(y_i = \ln(\mathrm{OD}_i)\)
+- $t_i$ lies inside the grow phase
+- $y_i = \ln(\mathrm{OD}_i)$
 - the OD is within the selected OD window
 
 A robust Theil–Sen linear regression is then fitted:
 
-\[
+$$
 y = a + \mu t
-\]
+$$
 
 where:
 
-- \(a\) is the intercept
-- \(\mu\) is the slope
+- $a$ is the intercept
+- $\mu$ is the slope
 
-The slope \(\mu\) is taken as the growth rate:
+The slope $\mu$ is taken as the growth rate:
 
-\[
+$$
 \mu = \frac{d\ln(\mathrm{OD})}{dt}
-\]
+$$
 
 ### Theil–Sen estimator
 
 The Theil–Sen slope is a robust estimate of the regression slope. Conceptually, it is based on the median of pairwise slopes:
 
-\[
+$$
 \mu = \mathrm{median}\left(\frac{y_j-y_i}{t_j-t_i}\right), \quad i < j
-\]
+$$
 
 This makes the fit less sensitive to outliers than ordinary least squares.
 
 If fewer than 6 points are available in a grow phase, the program sets:
 
-\[
+$$
 \mu = 0
-\]
+$$
 
 ---
 
@@ -231,16 +231,16 @@ If fewer than 6 points are available in a grow phase, the program sets:
 
 For every grow phase, the duplication time is computed from the growth rate:
 
-\[
+$$
 T_d = \frac{\ln 2}{\mu}
-\]
+$$
 
 where:
 
-- \(T_d\) is the duplication time
-- \(\mu\) is the growth rate
+- $T_d$ is the duplication time
+- $\mu$ is the growth rate
 
-If \(\mu = 0\), the duplication time is reported as positive infinity.
+If $\mu = 0$, the duplication time is reported as positive infinity.
 
 ---
 
@@ -256,9 +256,9 @@ For each analyzed cylinder, a CSV table is written. Each row corresponds to one 
 
 Formally, each table row is:
 
-\[
+$$
 (\mathrm{PhaseID}, t_{\mathrm{start}}, t_{\mathrm{end}}, \mu, T_d)
-\]
+$$
 
 ---
 
@@ -292,37 +292,37 @@ The plotting code computes safe axis ranges automatically.
 
 ### OD axis
 
-If the minimum and maximum log-OD values are \(y_{\min}\) and \(y_{\max}\), the plotted OD axis is slightly expanded:
+If the minimum and maximum log-OD values are $y_{\min}$ and $y_{\max}$, the plotted OD axis is slightly expanded:
 
 For the lower bound:
 
-\[
+$$
 y_{\min}^{*} =
 \begin{cases}
 0.95 y_{\min}, & y_{\min} > 0 \\
 1.05 y_{\min}, & y_{\min} < 0 \\
 y_{\min} - 0.1, & y_{\min} = 0
 \end{cases}
-\]
+$$
 
 For the upper bound:
 
-\[
+$$
 y_{\max}^{*} =
 \begin{cases}
 1.05 y_{\max}, & y_{\max} > 0 \\
 0.95 y_{\max}, & y_{\max} < 0 \\
 y_{\max} + 0.1, & y_{\max} = 0
 \end{cases}
-\]
+$$
 
 ### Pump/light axis
 
 The pump/light axis lower bound is the pump minimum. The upper bound is based on the larger of the pump maximum and light maximum:
 
-\[
+$$
 y_{\max}^{\mathrm{pump/light}} = 1.05 \cdot \max(p_{\max}, l_{\max})
-\]
+$$
 
 If both are zero, a default upper bound of 1 is used.
 
@@ -356,45 +356,45 @@ This folder contains:
 
 ### Natural logarithm of OD
 
-\[
+$$
 y = \ln(\mathrm{OD})
-\]
+$$
 
 ### Pump normalization
 
-\[
+$$
 p_{\mathrm{norm}}(t) = p(t) - p(t_0)
-\]
+$$
 
 ### OD filter window
 
-\[
+$$
 \mathrm{lowerODCut} \le \mathrm{OD}(t) \le \mathrm{upperODCut}
-\]
+$$
 
 or in transformed space:
 
-\[
+$$
 \ln(\mathrm{lowerODCut}) \le y(t) \le \ln(\mathrm{upperODCut})
-\]
+$$
 
 ### Growth model in log space
 
-\[
+$$
 y = a + \mu t
-\]
+$$
 
 ### Theil–Sen growth rate estimate
 
-\[
+$$
 \mu = \mathrm{median}\left(\frac{y_j-y_i}{t_j-t_i}\right)
-\]
+$$
 
 ### Duplication time
 
-\[
+$$
 T_d = \frac{\ln 2}{\mu}
-\]
+$$
 
 ---
 
@@ -419,15 +419,15 @@ In practical terms, the application does the following:
 - Missing cylinder columns are replaced internally by zero arrays
 - Missing pump/light values are forward-filled
 - OD missing values are dropped before OD analysis
-- Grow phases with too few points produce slope \(= 0\)
+- Grow phases with too few points produce slope $= 0$
 - If no valid OD points exist inside a candidate pump plateau, the grow phase collapses to `(0,0)` internally
-- If slope \(= 0\), duplication time becomes infinite
+- If slope $= 0$, duplication time becomes infinite
 
 ---
 
 ## Output files generated per selected cylinder
 
-For each selected cylinder \(k\), the program writes:
+For each selected cylinder $k$, the program writes:
 
 - `tableOfCylinder_k.csv`
 - `simpleAnalysisOfCylinder_k.html`
