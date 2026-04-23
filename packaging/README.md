@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../src/App/Assets/app_icon_readme.png" alt="Multicultivator Logo" width="680"/>
+  <img src="../src/App/Assets/app_icon_readme_transparent.png" alt="Multicultivator Logo" width="680"/>
 </p>
 
 <p align="center">
