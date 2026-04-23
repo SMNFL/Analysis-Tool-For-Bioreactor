@@ -2,10 +2,11 @@
   <img src="src/App/Assets/app_icon_readme.png" alt="Multicultivator Logo" width="680"/>
 </p>
 <p align="center">
+Multicultivator Analysis <br>
 <a href="README.md">Main Overview</a> | <a href="docs/analysis_summary.md">Analysis Summary</a> | <a href="src/README.md">App and Development</a> | <a href="packaging/README.md">Packaging and Installation</a>
 </p>
 <p align="center">
-Multicultivator Analysis — Cross platform Desktop application for optical density based growth phase analysis in multicultivator systems<br><br>
+Cross platform Desktop application for optical density based growth phase analysis in multicultivator systems<br><br>
 </p>
 
 ## Download and Run
