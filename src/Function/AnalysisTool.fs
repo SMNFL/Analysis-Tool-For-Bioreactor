@@ -89,6 +89,12 @@ module AnalysisFunction =
         let lightMax = safeArrayMaxBySndOr 0.0 lightData
         let maxCombined = max pumpMax lightMax
         pumpMin, (if maxCombined = 0.0 then 1.0 else maxCombined * 1.05)
+    
+    let private safeMinMaxForPumpAxis (pumpData: (float * float) array) =
+        let pumpMin = safeArrayMinBySndOr 0.0 pumpData
+        let pumpMax = safeArrayMaxBySndOr 0.0 pumpData
+        let maxCombined = max pumpMax pumpMax
+        pumpMin, pumpMax * 1.05
 
     let private safeArrayLastFstOr (fallback: float) (arr: (float * float) array) =
         if Array.isEmpty arr then fallback else fst arr.[arr.Length - 1]
@@ -156,7 +162,7 @@ module AnalysisFunction =
         let (start, finish) = growphase.[gpIndex]
         let filtered =
             odData
-            |> Array.filter (fun (t, od) -> t > start && t < finish && od > log lowerODCut && od < log upperODCut)
+            |> Array.filter (fun (t, od) -> t >= start && t <= finish && od >= log lowerODCut && od <= log upperODCut)
         let xs = filtered |> Array.map fst |> vector
         let ys = filtered |> Array.map snd |> vector
         if Vector.length xs > 5 && Vector.length ys > 5 then
@@ -206,7 +212,7 @@ module AnalysisFunction =
             |> Array.map (fun (minT, maxT) ->
                 odData
                 |> Array.filter (fun (time, od680) ->
-                    time > minT && time < maxT && od680 > log lowerODCut && od680 < log upperODCut))
+                    time >= minT && time <= maxT && od680 >= log lowerODCut && od680 <= log upperODCut))
 
         let growphaseTimeOD = arrayGrowphaseTimeOD.[growphaseIndex]
 
@@ -250,7 +256,7 @@ module AnalysisFunction =
             let filteredODData =
                 odData
                 |> Array.filter (fun (time, od680) ->
-                    time > start && time < finish && od680 > log lowerODCut && od680 < log upperODCut)
+                    time >= start && time <= finish && od680 >= log lowerODCut && od680 <= log upperODCut)
 
             let range = [ start .. 0.1 .. finish ]
 
@@ -573,7 +579,7 @@ module AnalysisFunction =
         (sampleId : string)
         =
 
-        let yAxisMinPumpLightData, yAxisMaxPumpLightData = safeMinMaxForPumpLightAxis pumpData lightData
+        let yAxisMinPumpData, yAxisMaxPumpData = safeMinMaxForPumpAxis pumpData
         let yAxisMinODDataAdded, yAxisMaxODDataAdded = safeMinMaxForOdAxis odData
         let slopeMin, slopeMax = safeSlopeMinMax growphase odData upperODCut lowerODCut
 
@@ -638,7 +644,7 @@ module AnalysisFunction =
         |> Chart.withYAxisStyle(
             $"pumpvolume (ml) cylinder {sampleId}",
             Side = StyleParam.Side.Right,
-            MinMax = (yAxisMinPumpLightData, yAxisMaxPumpLightData),
+            MinMax = (yAxisMinPumpData, yAxisMaxPumpData),
             Id = StyleParam.SubPlotId.YAxis 2,
             Domain = (0.625, 0.725),
             ShowLine = true,

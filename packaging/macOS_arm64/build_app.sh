@@ -55,7 +55,7 @@ cat > "$APP_DIR/Contents/Info.plist" <<EOF
 EOF
 
 chmod +x "$APP_DIR/Contents/MacOS/${EXECUTABLE_NAME}"
-xattr -dr com.apple.quarantine "$APP_DIR" 2>/dev/null || true
+xattr -cr "$APP_DIR"
 codesign --force --deep --sign - "$APP_DIR"
 
 echo "Executable inside app: $EXECUTABLE_NAME"
