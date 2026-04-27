@@ -12,16 +12,16 @@ cleanup() {
   rm -rf "$DMG_CONTENTS"
   rm -f releases/rw.*.dmg 2>/dev/null || true
 }
+trap cleanup EXIT
 
 if [ ! -d "$APP_DIR" ]; then
   echo "Error: app bundle not found at $APP_DIR"
   exit 1
 fi
 
-rm -rf "$DMG_CONTENTS"
 mkdir -p "$DMG_CONTENTS"
 
-cp -R "$APP_DIR" "$DMG_CONTENTS/${APP_DISPLAY_NAME}.app"
+ditto "$APP_DIR" "$DMG_CONTENTS/${APP_DISPLAY_NAME}.app"
 # ln -s /Applications "$DMG_CONTENTS/Applications"
 
 rm -f "$DMG_NAME"
@@ -35,7 +35,7 @@ rm -f "$DMG_NAME"
 create-dmg \
   --volname "${APP_DISPLAY_NAME}" \
   --window-size 800 400 \
-  --background "${BACKGROUND_IMAGE}" \
+  --background "$BACKGROUND_IMAGE" \
   --icon-size 100 \
   --icon "${APP_DISPLAY_NAME}.app" 250 230 \
   --hide-extension "${APP_DISPLAY_NAME}.app" \

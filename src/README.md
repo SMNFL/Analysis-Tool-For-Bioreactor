@@ -176,6 +176,18 @@ dotnet clean src/App/App.fsproj
 
 #### Publish self contained executables
 
+###### Clean publish artifacts
+
+Before publishing, remove old publish artifacts to avoid stale files or duplicate conflict files.
+
+```bash 
+dotnet clean src/App/App.fsproj
+rm -rf src/App/bin/Release/net8.0/osx-arm64
+rm -rf src/App/bin/Release/net8.0/osx-x64
+rm -rf src/App/bin/Release/net8.0/win-x64
+rm -rf src/App/bin/Release/net8.0/linux-x64
+```
+
 ###### macOS Apple Silicon
 ```bash
 dotnet publish src/App/App.fsproj -c Release -r osx-arm64 --self-contained true -p:Version=0.1.0-local -p:InformationalVersion=0.1.0-local -p:AssemblyVersion=0.1.0.0 -p:FileVersion=0.1.0.0

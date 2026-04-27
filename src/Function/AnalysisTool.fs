@@ -13,9 +13,9 @@ open FSharpAux.IO
 open Library
 
 /// <summary>
-/// This module contains the full analysis pipeline for the bioreactor tool.  
-/// It supports live progress logging via a callback and
-/// generate charts.  The public entry point is the <c>analysis</c> function.
+/// This module contains the full analysis pipeline for the bioreactor tool.
+/// It supports live progress logging via a callback and generates charts.
+/// The public entry point is the <c>analysis</c> function.
 /// </summary>
 module AnalysisFunction =
 
@@ -34,6 +34,12 @@ module AnalysisFunction =
 
     let private safeLogTime (log : string -> unit) (message : string) =
         logging log message true
+
+    /// Safe natural logarithm for OD values. F# `log` is the natural logarithm, i.e. ln(x).
+    /// Non-positive OD values cannot be log-transformed and are converted to NaN,
+    /// then removed later during per-cylinder extraction.
+    let private safeLn (x : float) =
+        if x > 0.0 then log x else Double.NaN
 
     /// Read the raw data from a tab‑separated file.
     let private readRawData (path : string) : Frame<float,string> =
@@ -54,10 +60,10 @@ module AnalysisFunction =
     /// sensible default when data is missing.
     let private zeroArray : (float * float) array = Array.init 250 (fun idx -> (float idx, 0.0))
 
-    /// Normalise a pump data array by subtracting its initial value.  Pump
+    /// Normalize a pump data array by subtracting its initial value.  Pump
     /// measurements are recorded as an absolute volume; subtracting the first
     /// measurement produces a more interpretable displacement series.
-    let private normalisePump (arr : (float * float) array) =
+    let private normalizePump (arr : (float * float) array) =
         if Array.isEmpty arr then
             arr
         else
@@ -93,8 +99,7 @@ module AnalysisFunction =
     let private safeMinMaxForPumpAxis (pumpData: (float * float) array) =
         let pumpMin = safeArrayMinBySndOr 0.0 pumpData
         let pumpMax = safeArrayMaxBySndOr 0.0 pumpData
-        let maxCombined = max pumpMax pumpMax
-        pumpMin, pumpMax * 1.05
+        pumpMin, (if pumpMax = 0.0 then 1.0 else pumpMax * 1.05)
 
     let private safeArrayLastFstOr (fallback: float) (arr: (float * float) array) =
         if Array.isEmpty arr then fallback else fst arr.[arr.Length - 1]
@@ -156,10 +161,10 @@ module AnalysisFunction =
                 (fst filteredOd.[0], fst (filteredOd |> Array.last))
         )
 
-    /// Compute the slope of a grow phase using Theil–Sen robust regression.
+    /// Compute the slope of a growth phase using Theil–Sen robust regression.
     /// Returns 0.0 if fewer than six observations are available.
-    let private computeSlope (growphase : (float * float) array) (odData : (float * float) array) (gpIndex : int) (upperODCut : float) (lowerODCut : float) : float =
-        let (start, finish) = growphase.[gpIndex]
+    let private computeSlope (growthphase : (float * float) array) (odData : (float * float) array) (gpIndex : int) (upperODCut : float) (lowerODCut : float) : float =
+        let (start, finish) = growthphase.[gpIndex]
         let filtered =
             odData
             |> Array.filter (fun (t, od) -> t >= start && t <= finish && od >= log lowerODCut && od <= log upperODCut)
@@ -171,44 +176,50 @@ module AnalysisFunction =
         else
             0.0
 
-    /// Convert a grow phase into a list of table rows capturing phase
+    /// Convert a growth phase into a list of table rows capturing phase
     /// characteristics (ID, start/end times, slope and duplication time).
-    let private tableRows (growphase : (float * float) array) (odData : (float * float) array) (upperODCut : float) (lowerODCut : float) : Library.tableRow list =
-        [ for i in 0 .. growphase.Length - 1 do
-            let (start, finish) = growphase.[i]
-            let slope = computeSlope growphase odData i upperODCut lowerODCut
+    let private tableRows (growthphase : (float * float) array) (odData : (float * float) array) (upperODCut : float) (lowerODCut : float) : Library.tableRow list =
+        [ for i in 0 .. growthphase.Length - 1 do
+            let (start, finish) = growthphase.[i]
+            let slope = computeSlope growthphase odData i upperODCut lowerODCut
             let duplicationTime = if slope = 0.0 then Double.PositiveInfinity else log 2.0 / slope
             yield { PhaseID = i + 1
-                    startTimeGrowphase = start
-                    endTimeGrowphase = finish
-                    slopeOrGrowrateOfLinearRegressionOrGrowphase = slope
-                    duplicationTimeOfGrowphase = duplicationTime } ]
+                    startTimeGrowthphase = start
+                    endTimeGrowthphase = finish
+                    slopeOrGrowthrateOfLinearRegressionOrGrowthphase = slope
+                    duplicationTimeOfGrowthphase = duplicationTime } ]
 
-    /// Save a table of grow phase characteristics to a CSV file.  Each row is
-    /// semi‑colon separated with columns: PhaseID;start;end;slope;duplicationTime.
+    // Save a table of growth phase characteristics to a CSV file.
+    // Rows are semicolon-separated with columns for phase ID, start time, end time, growth rate, and duplication time.
     let private saveTable (rows : Library.tableRow list) (outputDir : string) (cylinderId : string) =
-        let csvLines =
+        let header =
+            seq [ "Growth phase ID;Start time of growth phase (h);End time of growth phase (h);Growth rate (h^-1);Duplication time, Td (h)" ]
+
+        let dataLines =
             rows
             |> Seq.map (fun row ->
                 sprintf "%d;%.2f;%.2f;%.4f;%.4f"
                     row.PhaseID
-                    row.startTimeGrowphase
-                    row.endTimeGrowphase
-                    row.slopeOrGrowrateOfLinearRegressionOrGrowphase
-                    row.duplicationTimeOfGrowphase
+                    row.startTimeGrowthphase
+                    row.endTimeGrowthphase
+                    row.slopeOrGrowthrateOfLinearRegressionOrGrowthphase
+                    row.duplicationTimeOfGrowthphase
             )
+
+        let csvLines =
+            Seq.append header dataLines
         let path = Path.Combine(outputDir, sprintf "tableOfCylinder_%s.csv" cylinderId)
         FileIO.writeToFile true path csvLines
 
     let private chartGrowphaseLinearFitOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (odData : (float * float) array)
         (growphaseIndex : int)
         (upperODCut : float)
         (lowerODCut : float) =
 
         let arrayGrowphaseTimeOD =
-            growphase
+            growthphase
             |> Array.map (fun (minT, maxT) ->
                 odData
                 |> Array.filter (fun (time, od680) ->
@@ -245,12 +256,12 @@ module AnalysisFunction =
         |> Chart.Line
 
     let private shapeGrowOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (odData : (float * float) array)
         (upperODCut : float)
         (lowerODCut : float) =
 
-        growphase
+        growthphase
         |> Array.indexed
         |> Array.choose (fun (i, (start, finish)) ->
             let filteredODData =
@@ -322,7 +333,7 @@ module AnalysisFunction =
         |> Array.toList
 
     let private endGraphOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (odData : (float * float) array)
         (pumpData : (float * float) array)
         (lightData : (float * float) array)
@@ -336,31 +347,31 @@ module AnalysisFunction =
 
         let linearRegressionAllChartLine =
             [
-                for i in 0 .. growphase.Length - 1 do
-                    chartGrowphaseLinearFitOriginal growphase odData i upperODCut lowerODCut
-                    |> Chart.withTraceInfo $"Robust TheilSen {i}"
+                for i in 0 .. growthphase.Length - 1 do
+                    chartGrowphaseLinearFitOriginal growthphase odData i upperODCut lowerODCut
+                    |> Chart.withTraceInfo $"Robust Theil-Sen fit {i + 1}"
                     |> Chart.withLineStyle(Width = 2.25, Color = Color.fromHex "#fb2e01", Dash = StyleParam.DrawingStyle.Dot)
                     |> Chart.withAxisAnchor(X = 1, Y = 1)
-                    |> Chart.withTraceInfo(Name = $"Phase ID: {i}")
+                    |> Chart.withTraceInfo(Name = $"Growth phase ID: {i + 1}")
             ]
             |> Chart.combine
 
         let odDataAllChartPoint =
             Chart.Point(xy = odData)
             |> Chart.withLineStyle(Color = Color.fromHex "#7bc043")
-            |> Chart.withTraceInfo(Name = "Ln OD680")
+            |> Chart.withTraceInfo(Name = "ln(OD680)")
             |> Chart.withAxisAnchor(X = 1, Y = 1)
 
         let pumpDataAllChartPoint =
             Chart.Point(xy = pumpData)
             |> Chart.withLineStyle(Color = Color.fromHex "#005b96")
-            |> Chart.withTraceInfo(Name = "pumpvolume (ml)")
+            |> Chart.withTraceInfo(Name = "Pump volume (mL)")
             |> Chart.withAxisAnchor(X = 1, Y = 2)
 
         let lightDataAllChartPoint =
             Chart.Point(xy = lightData)
             |> Chart.withLineStyle(Color = Color.fromHex "#ffffba")
-            |> Chart.withTraceInfo(Name = "Lighttreatment (µE)")
+            |> Chart.withTraceInfo(Name = "Light treatment (µE)")
             |> Chart.withAxisAnchor(X = 1, Y = 2)
 
         [
@@ -371,7 +382,7 @@ module AnalysisFunction =
         ]
         |> Chart.combine
         |> Chart.withXAxisStyle(
-            "time (h)",
+            "Time (h)",
             Id = StyleParam.SubPlotId.XAxis 1,
             MinMax = (0.0, safeArrayLastFstOr 0.0 odData),
             Side = StyleParam.Side.Bottom,
@@ -380,7 +391,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            $"Ln OD680 cylinder {sampleId}",
+            $"ln(OD680), cylinder {sampleId}",
             Side = StyleParam.Side.Left,
             MinMax = (yAxisMinODDataAdded, yAxisMaxODDataAdded),
             Id = StyleParam.SubPlotId.YAxis 1,
@@ -389,7 +400,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            $"pumpvolume (ml) and light treatment (µE) cylinder {sampleId}",
+            $"Pump volume (mL) and light treatment (µE), cylinder {sampleId}",
             Side = StyleParam.Side.Right,
             MinMax = (yAxisMinPumpLightData, yAxisMaxPumpLightData),
             Id = StyleParam.SubPlotId.YAxis 2,
@@ -399,7 +410,7 @@ module AnalysisFunction =
         )
 
     let private endGraphSingleOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (lightphase : (float * float) array)
         (odData : (float * float) array)
         (pumpData : (float * float) array)
@@ -413,31 +424,31 @@ module AnalysisFunction =
 
         let linearRegressionAllChartLine =
             [
-                for i in 0 .. growphase.Length - 1 do
-                    chartGrowphaseLinearFitOriginal growphase odData i upperODCut lowerODCut
-                    |> Chart.withTraceInfo $"Robust TheilSen {i}"
+                for i in 0 .. growthphase.Length - 1 do
+                    chartGrowphaseLinearFitOriginal growthphase odData i upperODCut lowerODCut
+                    |> Chart.withTraceInfo $"Robust Theil-Sen fit {i + 1}"
                     |> Chart.withLineStyle(Width = 2.25, Color = Color.fromHex "#fb2e01", Dash = StyleParam.DrawingStyle.Dot)
                     |> Chart.withAxisAnchor(Y = 1)
-                    |> Chart.withTraceInfo(Name = $"Phase ID: {i}")
+                    |> Chart.withTraceInfo(Name = $"Growth phase ID: {i + 1}")
             ]
             |> Chart.combine
 
         let odDataAllChartPoint =
             Chart.Point(xy = odData)
             |> Chart.withLineStyle(Color = Color.fromHex "#7bc043")
-            |> Chart.withTraceInfo(Name = "Ln OD680")
+            |> Chart.withTraceInfo(Name = "ln(OD680)")
             |> Chart.withAxisAnchor(Y = 1)
 
         let pumpDataAllChartPoint =
             Chart.Point(xy = pumpData)
             |> Chart.withLineStyle(Color = Color.fromHex "#005b96")
-            |> Chart.withTraceInfo(Name = "pumpvolume (ml)")
+            |> Chart.withTraceInfo(Name = "Pump volume (mL)")
             |> Chart.withAxisAnchor(Y = 2)
 
         let lightDataAllChartPoint =
             Chart.Point(xy = lightData)
             |> Chart.withLineStyle(Color = Color.fromHex "#ffffba")
-            |> Chart.withTraceInfo(Name = "Lighttreatment (µE)")
+            |> Chart.withTraceInfo(Name = "Light treatment (µE)")
             |> Chart.withAxisAnchor(Y = 2)
 
         [
@@ -447,14 +458,14 @@ module AnalysisFunction =
             pumpDataAllChartPoint
         ]
         |> Chart.combine
-        |> Chart.withShapes(shapes = shapeGrowOriginal growphase odData upperODCut lowerODCut, Append = true)
+        |> Chart.withShapes(shapes = shapeGrowOriginal growthphase odData upperODCut lowerODCut, Append = true)
         |> Chart.withShapes(shapes = shapeLightOriginal odData lightData, Append = true)
         |> Chart.withTemplate ChartTemplates.lightMirrored
         |> Chart.withLegendStyle(Orientation = StyleParam.Orientation.Horizontal)
         |> Chart.withSize(Width = 1600, Height = 800)
-        |> Chart.withTitle($"OD680 with linear regression of the growphases of cylinder {sampleId} with pumpdata")
+        |> Chart.withTitle($"Robust linear regression of the growth phases for cylinder {sampleId}")
         |> Chart.withXAxisStyle(
-            "time (h)",
+            "Time (h)",
             Id = StyleParam.SubPlotId.XAxis 1,
             MinMax = (0.0, safeArrayLastFstOr 0.0 odData),
             Side = StyleParam.Side.Bottom,
@@ -463,7 +474,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            $"Ln OD680 cylinder {sampleId}",
+            $"ln(OD680), cylinder {sampleId}",
             Side = StyleParam.Side.Left,
             MinMax = (yAxisMinODDataAdded, yAxisMaxODDataAdded),
             Id = StyleParam.SubPlotId.YAxis 1,
@@ -473,7 +484,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            $"pumpvolume (ml) and light treatment (µE) cylinder {sampleId}",
+            $"Pump volume (mL) and light treatment (µE), cylinder {sampleId}",
             Side = StyleParam.Side.Right,
             MinMax = (yAxisMinPumpLightData, yAxisMaxPumpLightData),
             Id = StyleParam.SubPlotId.YAxis 2,
@@ -483,31 +494,31 @@ module AnalysisFunction =
         )
 
     let private pointchartSlopeOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (odData : (float * float) array)
         (upperODCut : float)
         (lowerODCut : float) =
 
         let xy =
-            tableRows growphase odData upperODCut lowerODCut
-            |> Seq.map (fun x -> float x.PhaseID, float x.slopeOrGrowrateOfLinearRegressionOrGrowphase)
+            tableRows growthphase odData upperODCut lowerODCut
+            |> Seq.map (fun x -> float x.PhaseID, float x.slopeOrGrowthrateOfLinearRegressionOrGrowthphase)
 
-        Chart.Point(xy = xy, Name = "growrate (h<sup>-1</sub>)")
+        Chart.Point(xy = xy, Name = "Growth rate (h<sup>-1</sup>)")
         |> Chart.withLineStyle(Color = Color.fromHex "#005b96")
 
     let private boxplotSlopeOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (odData : (float * float) array)
         (upperODCut : float)
         (lowerODCut : float) =
 
         let y =
-            tableRows growphase odData upperODCut lowerODCut
-            |> List.map (fun x -> float x.slopeOrGrowrateOfLinearRegressionOrGrowphase)
+            tableRows growthphase odData upperODCut lowerODCut
+            |> List.map (fun x -> float x.slopeOrGrowthrateOfLinearRegressionOrGrowthphase)
 
         Chart.BoxPlot(
             Y = y,
-            Name = "growrate (h<sup>-1</sub>)",
+            Name = "",
             Jitter = 0.1,
             BoxPoints = StyleParam.BoxPoints.SuspectedOutliers,
             BoxMean = StyleParam.BoxMean.True,
@@ -516,39 +527,39 @@ module AnalysisFunction =
         |> Chart.withLineStyle(Color = Color.fromHex "#005b96")
 
     let private sortSlopeListOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (odData : (float * float) array)
         (upperODCut : float)
         (lowerODCut : float) =
 
-        tableRows growphase odData upperODCut lowerODCut
-        |> List.map (fun rowItem -> rowItem.slopeOrGrowrateOfLinearRegressionOrGrowphase)
+        tableRows growthphase odData upperODCut lowerODCut
+        |> List.map (fun rowItem -> rowItem.slopeOrGrowthrateOfLinearRegressionOrGrowthphase)
         |> List.sort
 
-    let private safeSlopeMinMax (growphase: (float * float) array) (odData: (float * float) array) (upperODCut: float) (lowerODCut: float) =
-        let sorted = sortSlopeListOriginal growphase odData upperODCut lowerODCut
+    let private safeSlopeMinMax (growthphase: (float * float) array) (odData: (float * float) array) (upperODCut: float) (lowerODCut: float) =
+        let sorted = sortSlopeListOriginal growthphase odData upperODCut lowerODCut
         match sorted with
         | [] -> (-0.005, 0.005)
         | xs -> (xs.Head - 0.005, xs |> List.last |> fun v -> v + 0.005)
 
     let private tableChartOriginal
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (odData : (float * float) array)
         (upperODCut : float)
         (lowerODCut : float) =
 
         let header : seq<string> =
-            seq [ "<b>Phase ID</b>"; "starttime of growphase (h)"; "endtime of growphase (h)"; "growrate (h<sup>-1</sub>)"; "duplicationtime (Td) (h)" ]
+            seq [ "<b>Growth phase ID</b>"; "Start time of growth phase (h)"; "End time of growth phase (h)"; "Growth rate (h<sup>-1</sup>)"; "Duplication time, Td (h)" ]
 
         let rows : seq<seq<float>> =
-            tableRows growphase odData upperODCut lowerODCut
+            tableRows growthphase odData upperODCut lowerODCut
             |> Seq.map (fun rowItem ->
                 seq [
                     float rowItem.PhaseID
-                    round 2 rowItem.startTimeGrowphase
-                    round 2 rowItem.endTimeGrowphase
-                    round 3 rowItem.slopeOrGrowrateOfLinearRegressionOrGrowphase
-                    round 3 rowItem.duplicationTimeOfGrowphase
+                    round 2 rowItem.startTimeGrowthphase
+                    round 2 rowItem.endTimeGrowthphase
+                    round 3 rowItem.slopeOrGrowthrateOfLinearRegressionOrGrowthphase
+                    round 3 rowItem.duplicationTimeOfGrowthphase
                 ])
 
         Chart.Table(
@@ -569,7 +580,7 @@ module AnalysisFunction =
         |> Chart.withSize(Width = 1600, Height = 800)
 
     let private buildAdvancedChart
-        (growphase : (float * float) array)
+        (growthphase : (float * float) array)
         (lightphase : (float * float) array)
         (odData : (float * float) array)
         (pumpData : (float * float) array)
@@ -581,7 +592,7 @@ module AnalysisFunction =
 
         let yAxisMinPumpData, yAxisMaxPumpData = safeMinMaxForPumpAxis pumpData
         let yAxisMinODDataAdded, yAxisMaxODDataAdded = safeMinMaxForOdAxis odData
-        let slopeMin, slopeMax = safeSlopeMinMax growphase odData upperODCut lowerODCut
+        let slopeMin, slopeMax = safeSlopeMinMax growthphase odData upperODCut lowerODCut
 
         let subplotGrid =
             [|
@@ -592,11 +603,11 @@ module AnalysisFunction =
         let pumpDataAllChartPoint =
             Chart.Point(xy = pumpData)
             |> Chart.withLineStyle(Color = Color.fromHex "#005b96")
-            |> Chart.withTraceInfo(Name = "pumpvolume (ml)")
+            |> Chart.withTraceInfo(Name = "Pump volume (mL)")
 
         [
-            (endGraphOriginal growphase odData pumpData lightData upperODCut lowerODCut sampleId)
-            |> Chart.withShapes(shapes = shapeGrowOriginal growphase odData upperODCut lowerODCut, Append = true)
+            (endGraphOriginal growthphase odData pumpData lightData upperODCut lowerODCut sampleId)
+            |> Chart.withShapes(shapes = shapeGrowOriginal growthphase odData upperODCut lowerODCut, Append = true)
             |> Chart.withShapes(shapes = shapeLightOriginal odData lightData, Append = true)
             |> Chart.withTemplate ChartTemplates.lightMirrored
             |> Chart.withAxisAnchor(X = 1, Y = 1)
@@ -605,19 +616,19 @@ module AnalysisFunction =
             |> Chart.withTemplate ChartTemplates.lightMirrored
             |> Chart.withAxisAnchor(X = 1, Y = 2)
 
-            (pointchartSlopeOriginal growphase odData upperODCut lowerODCut)
+            (pointchartSlopeOriginal growthphase odData upperODCut lowerODCut)
             |> Chart.withTemplate ChartTemplates.lightMirrored
             |> Chart.withAxisAnchor(X = 3, Y = 3)
 
-            (boxplotSlopeOriginal growphase odData upperODCut lowerODCut)
+            (boxplotSlopeOriginal growthphase odData upperODCut lowerODCut)
             |> Chart.withTemplate ChartTemplates.lightMirrored
             |> Chart.withAxisAnchor(X = 4, Y = 4)
 
-            tableChartOriginal growphase odData upperODCut lowerODCut
+            tableChartOriginal growthphase odData upperODCut lowerODCut
             |> Chart.withTemplate ChartTemplates.lightMirrored
         ]
         |> Chart.Grid(nRows = 3, nCols = 2, Pattern = StyleParam.LayoutGridPattern.Independent)
-        |> Chart.withShapes(shapes = shapeGrowOriginal growphase odData upperODCut lowerODCut, Append = true)
+        |> Chart.withShapes(shapes = shapeGrowOriginal growthphase odData upperODCut lowerODCut, Append = true)
         |> Chart.withShapes(shapes = shapeLightOriginal odData lightData, Append = true)
         |> Chart.withTemplate ChartTemplates.lightMirrored
         |> Chart.withLegendStyle(Orientation = StyleParam.Orientation.Horizontal)
@@ -632,7 +643,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            $"Ln OD680 cylinder {sampleId}",
+            $"ln(OD680), cylinder {sampleId}",
             Side = StyleParam.Side.TopLeft,
             MinMax = (yAxisMinODDataAdded, yAxisMaxODDataAdded),
             Id = StyleParam.SubPlotId.YAxis 1,
@@ -642,7 +653,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            $"pumpvolume (ml) cylinder {sampleId}",
+            $"Pump volume (mL), cylinder {sampleId}",
             Side = StyleParam.Side.Right,
             MinMax = (yAxisMinPumpData, yAxisMaxPumpData),
             Id = StyleParam.SubPlotId.YAxis 2,
@@ -652,7 +663,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withXAxisStyle(
-            "time (h)",
+            "Time (h)",
             Id = StyleParam.SubPlotId.XAxis 2,
             MinMax = (0.0, safeArrayLastFstOr 0.0 odData),
             Domain = (0.00, 1.00),
@@ -662,9 +673,9 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withXAxisStyle(
-            $"growphases in cylinder {sampleId}",
+            $"Growth phases in cylinder {sampleId}",
             Id = StyleParam.SubPlotId.XAxis 3,
-            MinMax = (0.0, float growphase.Length + 1.0),
+            MinMax = (0.0, float growthphase.Length + 1.0),
             Domain = (0.00, 0.49),
             Side = StyleParam.Side.Bottom,
             ShowLine = true,
@@ -672,7 +683,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            "growrate (h<sup>-1</sub>)",
+            "Growth rate (h<sup>-1</sup>)",
             Id = StyleParam.SubPlotId.YAxis 3,
             MinMax = (slopeMin, slopeMax),
             Domain = (0.325, 0.55),
@@ -682,7 +693,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withXAxisStyle(
-            $"cylinder {sampleId}",
+            $"Cylinder {sampleId}",
             Id = StyleParam.SubPlotId.XAxis 4,
             Domain = (0.51, 1.00),
             Side = StyleParam.Side.Bottom,
@@ -691,7 +702,7 @@ module AnalysisFunction =
             ZeroLine = false
         )
         |> Chart.withYAxisStyle(
-            "growrate (h<sup>-1</sub>)",
+            "Growth rate (h<sup>-1</sup>)",
             Id = StyleParam.SubPlotId.YAxis 4,
             MinMax = (slopeMin, slopeMax),
             Domain = (0.325, 0.55),
@@ -723,7 +734,7 @@ module AnalysisFunction =
         |> Chart.withLayoutStyle(Font = (Font.init(Family = StyleParam.FontFamily.Arial, Size = 14)))
         |> Chart.withSize(1500, 1600)
         |> Chart.withConfig(Config.init(ToImageButtonOptions = ConfigObjects.ToImageButtonOptions.init(Format = StyleParam.ImageFormat.SVG)))
-        |> Chart.withTitle($"growphases analysis of cylinder {sampleId}")
+        |> Chart.withTitle($"Growth phase analysis for cylinder {sampleId}")
 
     let analysis
         (filePath : string)
@@ -739,6 +750,12 @@ module AnalysisFunction =
             safeLogTime logger (sprintf "File Path: %s" filePath)
             safeLogTime logger (sprintf "Upper OD cut: %.2f" upperODCut)
             safeLogTime logger (sprintf "Lower OD cut: %.2f" lowerODCut)
+
+            if lowerODCut <= 0.0 || upperODCut <= 0.0 then
+                invalidArg "OD cut values" "OD cut values must be greater than 0 because ln(x) is only defined for positive values."
+            if lowerODCut >= upperODCut then
+                invalidArg "OD cut values" "Lower OD cut must be smaller than upper OD cut."
+
             safeLogTime logger (sprintf "Cylinders: %s" (String.Join(", ", cylinder |> List.map (fun c -> string (c + 1)))))
             safeLogTime logger ""
             safeLogTime logger "Reading input data..."
@@ -800,10 +817,11 @@ module AnalysisFunction =
                     elif x.Contains("-8-") then "od_data_8"
                     else x
                 )
-                |> Frame.mapValues (fun x -> log x)
+                |> Frame.mapValues safeLn
             safeLogTime logger "✓ OD data extracted."
+            safeLogTime logger "OD values were transformed using the natural logarithm ln(x); non-positive OD values were ignored."
 
-            // helper to convert columns to arrays with defaults
+            // Helper to convert columns to arrays with defaults.
             let toArray (frame : Frame<float,string>) (colName : string) : (float * float) array =
                 let col = frame.TryGetColumnObservation<float>(colName, Lookup.Exact)
                 match col.HasValue with
@@ -813,7 +831,12 @@ module AnalysisFunction =
             let toArrayDropMissing (frame : Frame<float,string>) (colName : string) : (float * float) array =
                 let col = frame.TryGetColumnObservation<float>(colName, Lookup.Exact)
                 match col.HasValue with
-                | true  -> col.Value.Value |> Series.dropMissing |> Series.observations |> Seq.toArray
+                | true  ->
+                    col.Value.Value
+                    |> Series.dropMissing
+                    |> Series.observations
+                    |> Seq.filter (fun (_t, v) -> not (Double.IsNaN v) && not (Double.IsInfinity v))
+                    |> Seq.toArray
                 | false -> zeroArray
 
             safeLogTime logger "Preparing per cylinder arrays..."
@@ -826,7 +849,7 @@ module AnalysisFunction =
                    toArray pumpFrame "pump_data_6";
                    toArray pumpFrame "pump_data_7";
                    toArray pumpFrame "pump_data_8" |]
-                |> Array.map normalisePump
+                |> Array.map normalizePump
 
             let odDataAll =
                 [| toArrayDropMissing odFrame "od_data_1";
@@ -868,16 +891,16 @@ module AnalysisFunction =
             // for i in 0 .. 7 do
             //     safeLogTime logger (sprintf "Cylinder %d light phases: %d" (i + 1) lightPhasesAll.[i].Length)
 
-            safeLogTime logger "Computing grow phases..."
+            safeLogTime logger "Computing growth phases..."
             let growPhasesAll =
                 Array.init 8 (fun i ->
                     computeGrowPhases pumpDataAll.[i] odDataAll.[i] upperODCut lowerODCut
                 )
-            safeLogTime logger "✓ Grow phases computed."
+            safeLogTime logger "✓ Growth phases computed."
 
             // for i in 0 .. 7 do
-            //     safeLogTime logger (sprintf "Cylinder %d grow phases: %d" (i + 1) growPhasesAll.[i].Length)
-            //     safeLogTime logger (sprintf "Cylinder %d grow phase windows: %A" (i + 1) growPhasesAll.[i])
+            //     safeLogTime logger (sprintf "Cylinder %d growth phases: %d" (i + 1) growPhasesAll.[i].Length)
+            //     safeLogTime logger (sprintf "Cylinder %d growth phase windows: %A" (i + 1) growPhasesAll.[i])
 
             // Create output directory
             let fileDir = Path.GetDirectoryName(filePath)
@@ -890,7 +913,7 @@ module AnalysisFunction =
                 let cylId = sprintf "%d" (cylIndex + 1)
                 safeLog logger "────────────────────────────────────────"
                 safeLogTime logger (sprintf "CYLINDER %s" cylId)
-                safeLogTime logger (sprintf "before export: oddata=%d pumpdata=%d lightdata=%d growphases=%d lightphases=%d"
+                safeLogTime logger (sprintf "Before export: OD data=%d, pump data=%d, light data=%d, growth phases=%d, light phases=%d"
                     odDataAll.[cylIndex].Length
                     pumpDataAll.[cylIndex].Length
                     lightDataAll.[cylIndex].Length
@@ -899,21 +922,21 @@ module AnalysisFunction =
                 safeLog logger "────────────────────────────────────────"
 
                 if Array.isEmpty odDataAll.[cylIndex] then
-                    safeLogTime logger (sprintf "⚠ Skipping cylinder %s because odData is empty." cylId)
+                    safeLogTime logger (sprintf "⚠ Skipping cylinder %s because OD data is empty." cylId)
                 else
                     safeLogTime logger (sprintf "Exporting table for cylinder %s..." cylId)
                     let rows = tableRows growPhasesAll.[cylIndex] odDataAll.[cylIndex] upperODCut lowerODCut
-                    safeLogTime logger (sprintf "   • detected grow phases: %d" growPhasesAll.[cylIndex].Length)
+                    safeLogTime logger (sprintf "   • detected growth phases: %d" growPhasesAll.[cylIndex].Length)
                     safeLogTime logger (sprintf "   • detected light phases: %d" lightPhasesAll.[cylIndex].Length)
                     saveTable rows outputDir cylId
                     safeLogTime logger (sprintf "✓ Table exported for cylinder %s." cylId)
 
-                    // safeLogTime logger (sprintf "   • grow phases raw: %A" growPhasesAll.[cylIndex])
+                    // safeLogTime logger (sprintf "   • growth phases raw: %A" growPhasesAll.[cylIndex])
                     // safeLogTime logger (sprintf "   • first 10 OD values: %A" (odDataAll.[cylIndex] |> Array.truncate 10))
                     // safeLogTime logger (sprintf "   • first 10 pump values: %A" (pumpDataAll.[cylIndex] |> Array.truncate 10))
-                    let simpleShapeCount = shapeGrowOriginal growPhasesAll.[cylIndex] odDataAll.[cylIndex] upperODCut lowerODCut |> List.length
-                    let lightShapeCount = shapeLightOriginal odDataAll.[cylIndex] lightDataAll.[cylIndex] |> List.length
-                    // safeLogTime logger (sprintf "   • grow shapes used: %d" simpleShapeCount)
+                    // let simpleShapeCount = shapeGrowOriginal growPhasesAll.[cylIndex] odDataAll.[cylIndex] upperODCut lowerODCut |> List.length
+                    // let lightShapeCount = shapeLightOriginal odDataAll.[cylIndex] lightDataAll.[cylIndex] |> List.length
+                    // safeLogTime logger (sprintf "   • growth shapes used: %d" simpleShapeCount)
                     // safeLogTime logger (sprintf "   • light shapes used: %d" lightShapeCount)
 
                     safeLogTime logger (sprintf "Building simple chart for cylinder %s..." cylId)
@@ -960,11 +983,11 @@ module AnalysisFunction =
                 let outputDir = Path.Combine(fileDir, ("results_multicultivator_" + Path.GetFileNameWithoutExtension(filePath)))
                 Directory.CreateDirectory(outputDir) |> ignore
                 let debugLogPath = Path.Combine(outputDir, "debug.log")
-                File.AppendAllText(debugLogPath, sprintf "[%s] Error during analysis: %s%s%s%s" (DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) ex.Message Environment.NewLine (ex.ToString()) Environment.NewLine)
+                File.AppendAllText(debugLogPath, sprintf "[%s] Analysis error: %s%s%s%s" (DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) ex.Message Environment.NewLine (ex.ToString()) Environment.NewLine)
             with _ -> ()
             safeLog logger "════════════════════════════════════════"
             safeLogTime logger "✗ ANALYSIS FAILED"
             safeLog logger "════════════════════════════════════════"
-            safeLogTime logger (sprintf "Error during analysis: %s" ex.Message)
+            safeLogTime logger (sprintf "Analysis error: %s" ex.Message)
             safeLogTime logger (ex.ToString())
             Result.Error ex

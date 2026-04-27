@@ -14,7 +14,7 @@ fi
 
 rm -rf "$PKGROOT"
 mkdir -p "$PKGROOT/Applications"
-cp -R "$APP_PATH" "$PKGROOT/Applications/"
+ditto "$APP_PATH" "$PKGROOT/Applications/"
 
 pkgbuild \
   --root "$PKGROOT" \

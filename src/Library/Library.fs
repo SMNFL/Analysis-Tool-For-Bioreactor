@@ -9,8 +9,8 @@ module Library =
     type tableRow =
         {
             PhaseID : int
-            startTimeGrowphase : float
-            endTimeGrowphase : float
-            slopeOrGrowrateOfLinearRegressionOrGrowphase : float
-            duplicationTimeOfGrowphase : float
+            startTimeGrowthphase : float
+            endTimeGrowthphase : float
+            slopeOrGrowthrateOfLinearRegressionOrGrowthphase : float
+            duplicationTimeOfGrowthphase : float
         }

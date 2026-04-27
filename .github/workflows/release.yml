@@ -245,13 +245,13 @@ jobs:
       - name: Create Linux archive
         run: |
           mkdir -p releases
-          tar -czvf releases/Multicultivator-linux.tar.gz -C src/App/bin/Release/net8.0/linux-x64/publish .
+          tar -czvf releases/Multicultivator-linux-x64.tar.gz -C src/App/bin/Release/net8.0/linux-x64/publish .
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
-          name: multicultivator-linux
-          path: releases/Multicultivator-linux.tar.gz
+          name: multicultivator-linux-x64
+          path: releases/Multicultivator-linux-x64.tar.gz
 
   publish-release:
     name: Publish GitHub Release
@@ -285,7 +285,7 @@ jobs:
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
-          name: multicultivator-linux
+          name: multicultivator-linux-x64
           path: release-files/linux
 
       - name: Create GitHub release and upload assets
@@ -298,4 +298,4 @@ jobs:
             release-files/macos-x64/Multicultivator-macos-x64.pkg
             release-files/windows/MulticultivatorSetup.exe
             release-files/windows/Multicultivator-win-x64.zip
-            release-files/linux/Multicultivator-linux.tar.gz
+            release-files/linux/Multicultivator-linux-x64.tar.gz

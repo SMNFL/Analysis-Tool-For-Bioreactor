@@ -9,6 +9,13 @@ cd "$ROOT_DIR"
 APP_PROJECT="src/App/App.fsproj"
 RELEASES_DIR="releases"
 
+echo "Cleaning old build publish..."
+dotnet clean "$APP_PROJECT"
+rm -rf src/App/bin/Release/net8.0/osx-arm64
+rm -rf src/App/bin/Release/net8.0/osx-x64
+rm -rf src/App/bin/Release/net8.0/win-x64
+rm -rf src/App/bin/Release/net8.0/linux-x64
+
 mkdir -p "$RELEASES_DIR"
 
 echo "Cleaning old releases..."

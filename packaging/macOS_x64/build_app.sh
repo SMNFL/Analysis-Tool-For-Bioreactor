@@ -8,13 +8,25 @@ PROJECT="src/App/App.fsproj"
 RID="osx-x64"
 PUBLISH_DIR="src/App/bin/Release/net8.0/${RID}/publish"
 APP_DIR="releases/${APP_BUNDLE_NAME}.app"
+BUILD_ROOT="$(mktemp -d /tmp/multicultivator-app-x64.XXXXXX)"
+BUILD_APP_DIR="$BUILD_ROOT/${APP_BUNDLE_NAME}.app"
+
+cleanup() {
+  rm -rf "$BUILD_ROOT"
+}
+trap cleanup EXIT
 
 rm -rf "$APP_DIR"
-mkdir -p "$APP_DIR/Contents/MacOS"
-mkdir -p "$APP_DIR/Contents/Resources"
+mkdir -p "$BUILD_APP_DIR/Contents/MacOS"
+mkdir -p "$BUILD_APP_DIR/Contents/Resources"
 
-cp -R "$PUBLISH_DIR"/. "$APP_DIR/Contents/MacOS/"
-cp src/App/Assets/app_icon.icns "$APP_DIR/Contents/Resources/app_icon.icns"
+xattr -cr "$PUBLISH_DIR" 2>/dev/null || true
+dot_clean -m "$PUBLISH_DIR" 2>/dev/null || true
+find "$PUBLISH_DIR" -name '._*' -delete 2>/dev/null || true
+find "$PUBLISH_DIR" -name '.DS_Store' -delete 2>/dev/null || true
+
+ditto "$PUBLISH_DIR" "$BUILD_APP_DIR/Contents/MacOS"
+ditto src/App/Assets/app_icon.icns "$BUILD_APP_DIR/Contents/Resources/app_icon.icns"
 
 EXECUTABLE_PATH=$(find "$PUBLISH_DIR" -maxdepth 1 -type f -perm -111 ! -name "*.dll" ! -name "*.json" ! -name "*.dylib" ! -name "*.so" ! -name "*.pdb" | head -n1)
 
@@ -25,7 +37,7 @@ fi
 
 EXECUTABLE_NAME=$(basename "$EXECUTABLE_PATH")
 
-cat > "$APP_DIR/Contents/Info.plist" <<EOF
+cat > "$BUILD_APP_DIR/Contents/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -54,9 +66,21 @@ cat > "$APP_DIR/Contents/Info.plist" <<EOF
 </plist>
 EOF
 
-chmod +x "$APP_DIR/Contents/MacOS/${EXECUTABLE_NAME}"
-xattr -cr "$APP_DIR"
-codesign --force --deep --sign - "$APP_DIR"
+chmod +x "$BUILD_APP_DIR/Contents/MacOS/${EXECUTABLE_NAME}"
+
+# Remove macOS/iCloud/Finder metadata before signing.
+find "$BUILD_APP_DIR" -name '._*' -delete 2>/dev/null || true
+find "$BUILD_APP_DIR" -name '.DS_Store' -delete 2>/dev/null || true
+xattr -cr "$BUILD_APP_DIR" 2>/dev/null || true
+dot_clean -m "$BUILD_APP_DIR" 2>/dev/null || true
+xattr -cr "$BUILD_APP_DIR" 2>/dev/null || true
+
+codesign --force --deep --sign - "$BUILD_APP_DIR"
+
+# Copy the already signed bundle back into releases, then remove tmp folder.
+ditto "$BUILD_APP_DIR" "$APP_DIR"
+cleanup
+trap - EXIT
 
 echo "Executable inside app: $EXECUTABLE_NAME"
 echo "Created app bundle: $APP_DIR"
